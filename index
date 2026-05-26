@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix & Flip Investor Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-800 font-sans p-6">
+
+    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+        <div class="border-b pb-4 mb-6">
+            <h1 class="text-3xl font-bold text-blue-900">House Flipping Investing Calculator</h1>
+            <p class="text-gray-500 mt-1">Estimate potential profit, customize timelines, and track true costs.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">Deal Deal Details</h2>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Purchase Price ($)</label>
+                    <input type="number" id="purchasePrice" value="200000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Estimated Repair Costs (Rehab) ($)</label>
+                    <input type="number" id="rehabCosts" value="50000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">After Repair Value (ARV) ($)</label>
+                    <input type="number" id="arv" value="320000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                </div>
+
+                <hr class="border-gray-200 my-4">
+                <h2 class="text-xl font-semibold text-gray-700 mb-2">Timeline & Holding Costs</h2>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Projected Timeline (Months)</label>
+                    <input type="number" id="timeline" value="6" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Monthly Holding Costs (Mortgage, Taxes, Insurance, Utilities) ($/mo)</label>
+                    <input type="number" id="holdingCosts" value="1500" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-600">Transaction Costs (Buying & Selling Fees, Agent Commissions) ($)</label>
+                    <input type="number" id="transactionCosts" value="20000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                </div>
+            </div>
+
+            <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-between border border-blue-100">
+                <div>
+                    <h2 class="text-xl font-bold text-blue-900 mb-4">Financial Summary</h2>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">Total Capital Investment:</span>
+                            <span class="font-semibold" id="lblTotalInvestment">$0</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">Total Holding Costs (<span id="lblMonths">6</span> mo):</span>
+                            <span class="font-semibold" id="lblTotalHolding">$0</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">Total Project Cost:</span>
+                            <span class="font-semibold" id="lblTotalCost">$0</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-white rounded-lg shadow-inner text-center border border-blue-200">
+                        <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Estimated Net Profit</span>
+                        <div class="text-4xl font-black text-green-600 mt-1" id="lblNetProfit">$0</div>
+                        <div class="text-sm text-gray-500 mt-2">
+                            ROI: <span class="font-bold text-gray-700" id="lblROI">0%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 p-3 rounded-lg text-sm text-center" id="ruleBox">
+                        </div>
+                </div>
+
+                <button onclick="generatePDF()" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200 cursor-pointer">
+                    📄 Export Printable PDF Report
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateFlip() {
+            // Grab inputs
+            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const rehabCosts = parseFloat(document.getElementById('rehabCosts').value) || 0;
+            const arv = parseFloat(document.getElementById('arv').value) || 0;
+            const timeline = parseFloat(document.getElementById('timeline').value) || 0;
+            const holdingCostsPerMonth = parseFloat(document.getElementById('holdingCosts').value) || 0;
+            const transactionCosts = parseFloat(document.getElementById('transactionCosts').value) || 0;
+
+            // Calculations
+            const totalHoldingCosts = timeline * holdingCostsPerMonth;
+            const totalCost = purchasePrice + rehabCosts + totalHoldingCosts + transactionCosts;
+            const netProfit = arv - totalCost;
+            
+            // ROI = (Profit / Total Cost) * 100
+            const roi = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
+
+            // 70% Rule Assessment (Standard industry baseline: Purchase Price should be <= (ARV * 0.7) - Rehab)
+            const maxAllowableOffer = (arv * 0.7) - rehabCosts;
+
+            // Update UI
+            document.getElementById('lblTotalInvestment').innerText = `$${(purchasePrice + rehabCosts).toLocaleString()}`;
+            document.getElementById('lblMonths').innerText = timeline;
+            document.getElementById('lblTotalHolding').innerText = `$${totalHoldingCosts.toLocaleString()}`;
+            document.getElementById('lblTotalCost').innerText = `$${totalCost.toLocaleString()}`;
+            document.getElementById('lblNetProfit').innerText = `$${netProfit.toLocaleString()}`;
+            document.getElementById('lblROI').innerText = `${roi.toFixed(1)}%`;
+
+            // Style Net Profit color based on positive/negative
+            if(netProfit >= 0) {
+                document.getElementById('lblNetProfit').className = "text-4xl font-black text-green-600 mt-1";
+            } else {
+                document.getElementById('lblNetProfit').className = "text-4xl font-black text-red-600 mt-1";
+            }
+
+            // Rule Box Logic
+            const ruleBox = document.getElementById('ruleBox');
+            if (purchasePrice <= maxAllowableOffer) {
+                ruleBox.className = "mt-4 p-3 rounded-lg text-sm text-center bg-green-100 text-green-800 border border-green-200";
+                ruleBox.innerText = `✅ Passes the 70% Rule. Max recommended purchase: $${Math.round(maxAllowableOffer).toLocaleString()}`;
+            } else {
+                ruleBox.className = "mt-4 p-3 rounded-lg text-sm text-center bg-amber-100 text-amber-800 border border-amber-200";
+                ruleBox.innerText = `⚠️ Exceeds 70% Rule. Max recommended purchase: $${Math.round(maxAllowableOffer).toLocaleString()}`;
+            }
+        }
+
+        // Generate PDF Function using jsPDF
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(22);
+            doc.text("Fix & Flip Investment Proposal", 14, 20);
+            
+            doc.setFontSize(12);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
+            doc.line(14, 32, 196, 32);
+
+            // Fetch current values
+            const getVal = (id) => document.getElementById(id).value;
+            const getTxt = (id) => document.getElementById(id).innerText;
+
+            doc.setFont("helvetica", "bold");
+            doc.text("Project Cost Breakdown", 14, 45);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Purchase Price: $${parseFloat(getVal('purchasePrice')).toLocaleString()}`, 14, 55);
+            doc.text(`Rehab Costs: $${parseFloat(getVal('rehabCosts')).toLocaleString()}`, 14, 63);
+            doc.text(`Transaction Costs: $${parseFloat(getVal('transactionCosts')).toLocaleString()}`, 14, 71);
+            doc.text(`Holding Costs (${getVal('timeline')} months): ${getTxt('lblTotalHolding')}`, 14, 79);
+            doc.setFont("helvetica", "bold");
+            doc.text(`Total Project Cost: ${getTxt('lblTotalCost')}`, 14, 89);
+
+            doc.line(14, 95, 196, 95);
+
+            doc.text("Exit & Return Projections", 14, 110);
+            doc.setFont("helvetica", "normal");
+            doc.text(`After Repair Value (ARV): $${parseFloat(getVal('arv')).toLocaleString()}`, 14, 120);
+            
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "bold");
+            doc.text(`PROJECTED NET PROFIT: ${getTxt('lblNetProfit')}`, 14, 135);
+            doc.text(`Projected ROI: ${getTxt('lblROI')}`, 14, 145);
+
+            // Save PDF
+            doc.save("Flip-Investment-Report.pdf");
+        }
+
+        // Run initial calculation on load
+        calculateFlip();
+    </script>
+</body>
+</html>
