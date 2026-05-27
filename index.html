@@ -9,82 +9,137 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans p-6">
 
-    <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+    <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8">
         <div class="border-b pb-4 mb-6">
             <h1 class="text-3xl font-bold text-blue-900">House Flipping Investing Calculator</h1>
-            <p class="text-gray-500 mt-1">Estimate potential profit, customize timelines, and track true costs.</p>
+            <p class="text-gray-500 mt-1">Estimate potential profit, customize timelines, track line-item repairs, and true costs.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="space-y-4">
-                <h2 class="text-xl font-semibold text-gray-700 mb-2">Deal Deal Details</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
                 
                 <div>
-                    <label class="block text-sm font-medium text-gray-600">Purchase Price ($)</label>
-                    <input type="number" id="purchasePrice" value="200000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                    <h2 class="text-xl font-bold text-gray-700 border-b pb-1 mb-3">1. Purchase & Financing</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Purchase Price ($)</label>
+                            <input type="number" id="purchasePrice" value="200000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">After Repair Value (ARV) ($)</label>
+                            <input type="number" id="arv" value="320000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Down Payment (%)</label>
+                            <input type="number" id="downPaymentPct" value="20" min="0" max="100" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                            <p class="text-xs text-gray-400 mt-1">Calculated Down Payment: <span id="lblCalculatedDown" class="font-semibold text-gray-600">$0</span></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Closing Costs (%)</label>
+                            <input type="number" id="closingCostPct" value="2.5" step="0.1" min="0" max="100" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                            <p class="text-xs text-gray-400 mt-1">Calculated Closing Costs: <span id="lblCalculatedClosing" class="font-semibold text-gray-600">$0</span></p>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-600">Estimated Repair Costs (Rehab) ($)</label>
-                    <input type="number" id="rehabCosts" value="50000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                    <h2 class="text-xl font-bold text-gray-700 border-b pb-1 mb-3">2. Timeline & Holding</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Projected Timeline (Months)</label>
+                            <input type="number" id="timeline" value="6" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-600">Monthly Holding Costs ($/mo)</label>
+                            <input type="number" id="holdingCosts" value="1500" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium text-gray-600">After Repair Value (ARV) ($)</label>
-                    <input type="number" id="arv" value="320000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                    <div class="flex justify-between items-center border-b pb-1 mb-3">
+                        <h2 class="text-xl font-bold text-gray-700">3. Rehab Budget Line Items</h2>
+                        <span class="text-sm font-bold text-blue-700 bg-blue-50 px-2 py-1 rounded">Total Rehab: <span id="lblTotalRehab">$0</span></span>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <div class="grid grid-cols-5 gap-2">
+                            <input type="text" id="repItem1" value="Roofing / Exterior" class="col-span-3 p-2 border rounded-md bg-gray-50 text-sm font-medium">
+                            <input type="number" id="repAmt1" value="12000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            <input type="text" id="repItem2" value="Kitchen Remodel" class="col-span-3 p-2 border rounded-md bg-gray-50 text-sm font-medium">
+                            <input type="number" id="repAmt2" value="15000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            <input type="text" id="repItem3" value="Bathrooms" class="col-span-3 p-2 border rounded-md bg-gray-50 text-sm font-medium">
+                            <input type="number" id="repAmt3" value="8000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            <input type="text" id="repItem4" value="Flooring & Paint" class="col-span-3 p-2 border rounded-md bg-gray-50 text-sm font-medium">
+                            <input type="number" id="repAmt4" value="7000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            <input type="text" id="repItem5" value="HVAC / Electrical / Plumbing" class="col-span-3 p-2 border rounded-md bg-gray-50 text-sm font-medium">
+                            <input type="number" id="repAmt5" value="5000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            <input type="text" id="repItem6" value="Permits & Architecture" class="col-span-3 p-2 border rounded-md bg-gray-50 text-sm font-medium">
+                            <input type="number" id="repAmt6" value="1500" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                        <div class="grid grid-cols-5 gap-2">
+                            <input type="text" id="repItem7" value="Contingency / Miscellaneous" class="col-span-3 p-2 border rounded-md bg-gray-50 text-sm font-medium">
+                            <input type="number" id="repAmt7" value="3500" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
+                        </div>
+                    </div>
                 </div>
 
-                <hr class="border-gray-200 my-4">
-                <h2 class="text-xl font-semibold text-gray-700 mb-2">Timeline & Holding Costs</h2>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-600">Projected Timeline (Months)</label>
-                    <input type="number" id="timeline" value="6" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-600">Monthly Holding Costs (Mortgage, Taxes, Insurance, Utilities) ($/mo)</label>
-                    <input type="number" id="holdingCosts" value="1500" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-600">Transaction Costs (Buying & Selling Fees, Agent Commissions) ($)</label>
-                    <input type="number" id="transactionCosts" value="20000" class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateFlip()">
-                </div>
             </div>
 
-            <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-between border border-blue-100">
+            <div class="bg-blue-50 rounded-xl p-6 flex flex-col justify-between border border-blue-100 h-fit sticky top-6">
                 <div>
                     <h2 class="text-xl font-bold text-blue-900 mb-4">Financial Summary</h2>
                     
-                    <div class="space-y-3">
+                    <div class="space-y-3 text-sm">
                         <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">Total Capital Investment:</span>
-                            <span class="font-semibold" id="lblTotalInvestment">$0</span>
+                            <span class="text-gray-600">Down Payment Outlay:</span>
+                            <span class="font-semibold" id="lblSummaryDown">$0</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">Closing Cost Outlay:</span>
+                            <span class="font-semibold" id="lblSummaryClosing">$0</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2">
+                            <span class="text-gray-600">Total Rehab Budget:</span>
+                            <span class="font-semibold" id="lblSummaryRehab">$0</span>
                         </div>
                         <div class="flex justify-between border-b pb-2">
                             <span class="text-gray-600">Total Holding Costs (<span id="lblMonths">6</span> mo):</span>
                             <span class="font-semibold" id="lblTotalHolding">$0</span>
                         </div>
-                        <div class="flex justify-between border-b pb-2">
-                            <span class="text-gray-600">Total Project Cost:</span>
-                            <span class="font-semibold" id="lblTotalCost">$0</span>
+                        <div class="flex justify-between border-b pb-2 pt-1 font-bold text-gray-900">
+                            <span>Total Out-of-Pocket Equity:</span>
+                            <span id="lblTotalEquity">$0</span>
+                        </div>
+                        <div class="flex justify-between border-b pb-2 pt-1 text-xs text-gray-500 italic">
+                            <span>Total Deal All-In Cost:</span>
+                            <span id="lblTotalAllIn">$0</span>
                         </div>
                     </div>
 
-                    <div class="mt-8 p-4 bg-white rounded-lg shadow-inner text-center border border-blue-200">
-                        <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Estimated Net Profit</span>
+                    <div class="mt-6 p-4 bg-white rounded-lg shadow-inner text-center border border-blue-200">
+                        <span class="text-sm font-medium text-gray-500 uppercase tracking-wider">Projected Net Profit</span>
                         <div class="text-4xl font-black text-green-600 mt-1" id="lblNetProfit">$0</div>
                         <div class="text-sm text-gray-500 mt-2">
-                            ROI: <span class="font-bold text-gray-700" id="lblROI">0%</span>
+                            Cash-on-Cash ROI: <span class="font-bold text-gray-700" id="lblROI">0%</span>
                         </div>
                     </div>
                     
-                    <div class="mt-4 p-3 rounded-lg text-sm text-center" id="ruleBox">
+                    <div class="mt-4 p-3 rounded-lg text-xs text-center" id="ruleBox">
                         </div>
                 </div>
 
-                <button onclick="generatePDF()" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200 cursor-pointer">
+                <button onclick="generatePDF()" class="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg shadow transition duration-200 cursor-pointer text-sm">
                     📄 Export Printable PDF Report
                 </button>
             </div>
@@ -93,95 +148,135 @@
 
     <script>
         function calculateFlip() {
-            // Grab inputs
+            // Master inputs
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
-            const rehabCosts = parseFloat(document.getElementById('rehabCosts').value) || 0;
             const arv = parseFloat(document.getElementById('arv').value) || 0;
+            const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) || 0;
+            const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) || 0;
             const timeline = parseFloat(document.getElementById('timeline').value) || 0;
             const holdingCostsPerMonth = parseFloat(document.getElementById('holdingCosts').value) || 0;
-            const transactionCosts = parseFloat(document.getElementById('transactionCosts').value) || 0;
 
-            // Calculations
+            // Compute 7 line item repairs
+            let totalRehab = 0;
+            for(let i = 1; i <= 7; i++) {
+                totalRehab += parseFloat(document.getElementById(`repAmt${i}`).value) || 0;
+            }
+
+            // Calculations based on rules
+            const downPaymentAmount = purchasePrice * (downPaymentPct / 100);
+            const closingCostsAmount = purchasePrice * (closingCostPct / 100);
             const totalHoldingCosts = timeline * holdingCostsPerMonth;
-            const totalCost = purchasePrice + rehabCosts + totalHoldingCosts + transactionCosts;
-            const netProfit = arv - totalCost;
             
-            // ROI = (Profit / Total Cost) * 100
-            const roi = totalCost > 0 ? (netProfit / totalCost) * 100 : 0;
+            // Financial Benchmarks
+            const totalAllInCost = purchasePrice + totalRehab + closingCostsAmount + totalHoldingCosts;
+            const totalOutofPocketEquity = downPaymentAmount + closingCostsAmount + totalRehab + totalHoldingCosts;
+            
+            const netProfit = arv - totalAllInCost;
+            
+            // ROI relative to actual money tied up in the deal (Cash-on-Cash Return)
+            const roi = totalOutofPocketEquity > 0 ? (netProfit / totalOutofPocketEquity) * 100 : 0;
 
-            // 70% Rule Assessment (Standard industry baseline: Purchase Price should be <= (ARV * 0.7) - Rehab)
-            const maxAllowableOffer = (arv * 0.7) - rehabCosts;
+            // Real Estate 70% Rule Calculations
+            const maxAllowableOffer = (arv * 0.7) - totalRehab;
 
-            // Update UI
-            document.getElementById('lblTotalInvestment').innerText = `$${(purchasePrice + rehabCosts).toLocaleString()}`;
+            // Update UI Helper Sub-labels
+            document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
+            document.getElementById('lblCalculatedClosing').innerText = `$${closingCostsAmount.toLocaleString()}`;
+            document.getElementById('lblTotalRehab').innerText = `$${totalRehab.toLocaleString()}`;
+
+            // Update Dashboard UI
+            document.getElementById('lblSummaryDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
+            document.getElementById('lblSummaryClosing').innerText = `$${closingCostsAmount.toLocaleString()}`;
+            document.getElementById('lblSummaryRehab').innerText = `$${totalRehab.toLocaleString()}`;
             document.getElementById('lblMonths').innerText = timeline;
             document.getElementById('lblTotalHolding').innerText = `$${totalHoldingCosts.toLocaleString()}`;
-            document.getElementById('lblTotalCost').innerText = `$${totalCost.toLocaleString()}`;
+            document.getElementById('lblTotalEquity').innerText = `$${totalOutofPocketEquity.toLocaleString()}`;
+            document.getElementById('lblTotalAllIn').innerText = `$${totalAllInCost.toLocaleString()}`;
             document.getElementById('lblNetProfit').innerText = `$${netProfit.toLocaleString()}`;
             document.getElementById('lblROI').innerText = `${roi.toFixed(1)}%`;
 
-            // Style Net Profit color based on positive/negative
+            // Adjust Net Profit visual coloring
             if(netProfit >= 0) {
                 document.getElementById('lblNetProfit').className = "text-4xl font-black text-green-600 mt-1";
             } else {
                 document.getElementById('lblNetProfit').className = "text-4xl font-black text-red-600 mt-1";
             }
 
-            // Rule Box Logic
+            // Rule Box Assessment
             const ruleBox = document.getElementById('ruleBox');
             if (purchasePrice <= maxAllowableOffer) {
-                ruleBox.className = "mt-4 p-3 rounded-lg text-sm text-center bg-green-100 text-green-800 border border-green-200";
-                ruleBox.innerText = `✅ Passes the 70% Rule. Max recommended purchase: $${Math.round(maxAllowableOffer).toLocaleString()}`;
+                ruleBox.className = "mt-4 p-3 rounded-lg text-xs text-center bg-green-100 text-green-800 border border-green-200";
+                ruleBox.innerText = `✅ Passes 70% Rule. Max Recommended Purchase: $${Math.round(maxAllowableOffer).toLocaleString()}`;
             } else {
-                ruleBox.className = "mt-4 p-3 rounded-lg text-sm text-center bg-amber-100 text-amber-800 border border-amber-200";
-                ruleBox.innerText = `⚠️ Exceeds 70% Rule. Max recommended purchase: $${Math.round(maxAllowableOffer).toLocaleString()}`;
+                ruleBox.className = "mt-4 p-3 rounded-lg text-xs text-center bg-amber-100 text-amber-800 border border-amber-200";
+                ruleBox.innerText = `⚠️ Exceeds 70% Rule. Max Recommended Purchase: $${Math.round(maxAllowableOffer).toLocaleString()}`;
             }
         }
 
-        // Generate PDF Function using jsPDF
+        // Comprehensive PDF Export Generation
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
 
             doc.setFont("helvetica", "bold");
             doc.setFontSize(22);
-            doc.text("Fix & Flip Investment Proposal", 14, 20);
+            doc.text("Comprehensive Fix & Flip Investment Proposal", 14, 20);
             
-            doc.setFontSize(12);
+            doc.setFontSize(10);
             doc.setFont("helvetica", "normal");
-            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 28);
-            doc.line(14, 32, 196, 32);
+            doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 26);
+            doc.line(14, 30, 196, 30);
 
-            // Fetch current values
+            // Core Metrics Elements values
             const getVal = (id) => document.getElementById(id).value;
             const getTxt = (id) => document.getElementById(id).innerText;
 
             doc.setFont("helvetica", "bold");
-            doc.text("Project Cost Breakdown", 14, 45);
+            doc.setFontSize(12);
+            doc.text("1. Acquisition & Capital Requirements", 14, 40);
             doc.setFont("helvetica", "normal");
-            doc.text(`Purchase Price: $${parseFloat(getVal('purchasePrice')).toLocaleString()}`, 14, 55);
-            doc.text(`Rehab Costs: $${parseFloat(getVal('rehabCosts')).toLocaleString()}`, 14, 63);
-            doc.text(`Transaction Costs: $${parseFloat(getVal('transactionCosts')).toLocaleString()}`, 14, 71);
-            doc.text(`Holding Costs (${getVal('timeline')} months): ${getTxt('lblTotalHolding')}`, 14, 79);
+            doc.text(`Target Purchase Price: $${parseFloat(getVal('purchasePrice')).toLocaleString()}`, 14, 48);
+            doc.text(`Down Payment Allocation (${getVal('downPaymentPct')}%): ${getTxt('lblCalculatedDown')}`, 14, 55);
+            doc.text(`Estimated Closing Costs (${getVal('closingCostPct')}%): ${getTxt('lblCalculatedClosing')}`, 14, 62);
+            doc.text(`Estimated Project Duration: ${getVal('timeline')} Months (Holding Cost Total: ${getTxt('lblTotalHolding')})`, 14, 69);
+
+            // Detailed Repair Section
             doc.setFont("helvetica", "bold");
-            doc.text(`Total Project Cost: ${getTxt('lblTotalCost')}`, 14, 89);
-
-            doc.line(14, 95, 196, 95);
-
-            doc.text("Exit & Return Projections", 14, 110);
+            doc.text("2. Itemized Rehab Budget Breakdown", 14, 82);
             doc.setFont("helvetica", "normal");
-            doc.text(`After Repair Value (ARV): $${parseFloat(getVal('arv')).toLocaleString()}`, 14, 120);
+            
+            let yOffset = 90;
+            for(let i = 1; i <= 7; i++) {
+                const itemName = getVal(`repItem${i}`);
+                const itemAmt = parseFloat(getVal(`repAmt${i}`)) || 0;
+                doc.text(`• ${itemName}:`, 18, yOffset);
+                doc.text(`$${itemAmt.toLocaleString()}`, 140, yOffset, { align: "right" });
+                yOffset += 7;
+            }
+            
+            doc.setFont("helvetica", "bold");
+            doc.text(`Total Aggregated Rehab Budget:`, 14, yOffset + 3);
+            doc.text(`${getTxt('lblTotalRehab')}`, 140, yOffset + 3, { align: "right" });
+
+            doc.line(14, yOffset + 8, 196, yOffset + 8);
+
+            // Final Underwriting Bottomline Results
+            doc.text("3. Financial Projections & Deal Return", 14, yOffset + 18);
+            doc.setFont("helvetica", "normal");
+            doc.text(`Estimated After Repair Value (ARV): $${parseFloat(getVal('arv')).toLocaleString()}`, 14, yOffset + 26);
+            doc.text(`Total All-In Deal Execution Cost: ${getTxt('lblTotalAllIn')}`, 14, yOffset + 33);
+            doc.text(`Total Cash Investor Equity Required: ${getTxt('lblTotalEquity')}`, 14, yOffset + 40);
             
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
-            doc.text(`PROJECTED NET PROFIT: ${getTxt('lblNetProfit')}`, 14, 135);
-            doc.text(`Projected ROI: ${getTxt('lblROI')}`, 14, 145);
+            doc.text(`PROJECTED NET PROFIT MARGIN: ${getTxt('lblNetProfit')}`, 14, yOffset + 53);
+            doc.text(`ESTIMATED CASH-ON-CASH ROI: ${getTxt('lblROI')}`, 14, yOffset + 62);
 
-            // Save PDF
-            doc.save("Flip-Investment-Report.pdf");
+            // Download trigger
+            doc.save("Comprehensive-Flip-Analysis-Report.pdf");
         }
 
-        // Run initial calculation on load
+        // Initialize script call
         calculateFlip();
     </script>
 </body>
