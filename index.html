@@ -357,7 +357,7 @@
 
             // Update Dynamic Inputs & Output UI Fields
             document.getElementById('lblCalculatedARV').value = `$${Math.round(arv).toLocaleString()}`;
-            document.getElementById('lblDynamicARV').innerText = `$${Math.round(arv).toLocaleString()}`;
+            document.getElementById('lblDashARV').innerText = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblDashPct').innerText = `+${totalValueIncreasePct}%`;
             document.getElementById('lblCalculatedClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
@@ -469,14 +469,10 @@
             doc.save("Flip-Valuation-Analysis-Report.pdf");
         }
 
-        // Fix tracking issue in right column template binding
-        document.addEventListener("DOMContentLoaded", function() {
-            var dashARV = document.getElementById('lblDashARV');
-            if(!dashARV && document.getElementById('lblDynamicARV')) {
-                document.getElementById('lblDynamicARV').id = 'lblDashARV';
-            }
+        // Initialize calculation on page load
+        window.onload = function() {
             calculateAll();
-        });
+        };
     </script>
 </body>
 </html>
