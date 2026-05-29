@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Fix & Flip Analyzer</title>
+    <title>Advanced Fix & Flip Value Analyzer</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        /* Smooth transitions for our collapsible tabs */
         .accordion-content {
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease-out, padding 0.3s ease-out;
         }
         .accordion-content.open {
-            max-height: 1000px; /* Generous height for open inputs */
+            max-height: 1200px;
         }
     </style>
 </head>
@@ -24,7 +23,7 @@
         <div class="border-b pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-3xl font-black text-slate-900 tracking-tight">House Flipping Investing Calculator</h1>
-                <p class="text-gray-500 mt-1">Professional underwriting tool with risk sensitivity analysis.</p>
+                <p class="text-gray-500 mt-1">Dynamic upgrade decision matrix & value addition simulator.</p>
             </div>
             <button onclick="generatePDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow transition duration-200 cursor-pointer text-sm flex items-center gap-2">
                 📄 Export Presentation PDF
@@ -36,13 +35,18 @@
                 
                 <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <button onclick="toggleAccordion('accAcquisition')" class="w-full bg-slate-50 hover:bg-slate-100 p-4 font-bold text-left text-slate-800 flex justify-between items-center cursor-pointer transition">
-                        <span class="flex items-center gap-2">🏠 1. Acquisition & Buying Costs</span>
+                        <span class="flex items-center gap-2">🏠 1. Acquisition & Initial Property Value</span>
                         <span id="icon-accAcquisition" class="transform transition-transform duration-200 text-gray-400 rotate-180">▼</span>
                     </button>
                     <div id="accAcquisition" class="accordion-content open p-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Purchase Price ($)</label>
                             <input type="number" id="purchasePrice" value="200000" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateAll()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 uppercase">Current Baseline Value (Unrehabbed) ($)</label>
+                            <input type="number" id="baseValue" value="220000" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateAll()">
+                            <p class="text-xs text-gray-400 mt-1">ARV will scale upward from this base amount.</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Buying Closing Costs (%)</label>
@@ -54,40 +58,87 @@
 
                 <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <button onclick="toggleAccordion('accRehab')" class="w-full bg-slate-50 hover:bg-slate-100 p-4 font-bold text-left text-slate-800 flex justify-between items-center cursor-pointer transition">
-                        <span class="flex items-center gap-2">🔨 2. Rehab Budget Line Items</span>
+                        <span class="flex items-center gap-2">🔨 2. Rehab Strategy Options (Select Upgrades)</span>
                         <span id="icon-accRehab" class="transform transition-transform duration-200 text-gray-400">▼</span>
                     </button>
-                    <div id="accRehab" class="accordion-content p-0 border-t border-gray-100 divide-y divide-gray-100">
-                        <div class="p-4 space-y-2 bg-white">
-                            <div class="grid grid-cols-5 gap-2">
-                                <input type="text" id="repItem1" value="Roofing / Exterior" class="col-span-3 p-2 border rounded-md bg-gray-50 text-xs font-medium">
-                                <input type="number" id="repAmt1" value="12000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
-                            </div>
-                            <div class="grid grid-cols-5 gap-2">
-                                <input type="text" id="repItem2" value="Kitchen Remodel" class="col-span-3 p-2 border rounded-md bg-gray-50 text-xs font-medium">
-                                <input type="number" id="repAmt2" value="15000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
-                            </div>
-                            <div class="grid grid-cols-5 gap-2">
-                                <input type="text" id="repItem3" value="Bathrooms" class="col-span-3 p-2 border rounded-md bg-gray-50 text-xs font-medium">
-                                <input type="number" id="repAmt3" value="8000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
-                            </div>
-                            <div class="grid grid-cols-5 gap-2">
-                                <input type="text" id="repItem4" value="Flooring & Paint" class="col-span-3 p-2 border rounded-md bg-gray-50 text-xs font-medium">
-                                <input type="number" id="repAmt4" value="7000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
-                            </div>
-                            <div class="grid grid-cols-5 gap-2">
-                                <input type="text" id="repItem5" value="HVAC / Mechanical" class="col-span-3 p-2 border rounded-md bg-gray-50 text-xs font-medium">
-                                <input type="number" id="repAmt5" value="5000" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
-                            </div>
-                            <div class="grid grid-cols-5 gap-2">
-                                <input type="text" id="repItem6" value="Permits & Plans" class="col-span-3 p-2 border rounded-md bg-gray-50 text-xs font-medium">
-                                <input type="number" id="repAmt6" value="1500" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
-                            </div>
-                            <div class="grid grid-cols-5 gap-2">
-                                <input type="text" id="repItem7" value="Contingency Reserve" class="col-span-3 p-2 border rounded-md bg-gray-50 text-xs font-medium">
-                                <input type="number" id="repAmt7" value="3500" class="col-span-2 p-2 border rounded-md text-right focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
+                    <div id="accRehab" class="accordion-content p-4 border-t border-gray-100 space-y-4 bg-white">
+                        
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪟 Windows Strategy</label>
+                            <select id="optWindows" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="4500,3,Window Repair">Window Repair ($4,500 | +3% Value)</option>
+                                <option value="15000,10,Replacement Windows">Replacement Windows ($15,000 | +10% Value)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Roof Strategy</label>
+                            <select id="optRoof" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="2500,4,Roof Repairs">Roof Repairs ($2,500 | +4% Value)</option>
+                                <option value="12000,10,Roof Replacement">Roof Replacement ($12,000 | +10% Value)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🍳 Kitchen Rehab</label>
+                            <select id="optKitchen" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="14000,7,Kitchen Rehab (Low Cost)">Kitchen Rehab - Low Cost ($14,000 | +7% Value)</option>
+                                <option value="18000,9,Kitchen Rehab (Mid Line)">Kitchen Rehab - Mid Line ($18,000 | +9% Value)</option>
+                                <option value="24000,12,Kitchen Rehab (High End)">Kitchen Rehab - High End ($24,000 | +12% Value)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🛁 Bathroom Rehab</label>
+                            <select id="optBathroom" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="4500,12,Bathroom Rehab (Half Bath)">Half Bathroom Rehab ($4,500 | +12% Value)</option>
+                                <option value="7500,12,Bathroom Rehab (Full)">Full Bathroom Rehab ($7,500 | +12% Value)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🌳 Landscaping Strategy</label>
+                            <select id="optLandscape" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="3000,5,Basic Landscape Work">Basic Landscape Work ($3,000 | +5% Value)</option>
+                                <option value="8000,7,Advanced Landscape Work">Advanced Landscape Work ($8,000 | +7% Value)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Flooring</label>
+                            <select id="optFlooring" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="5000,10,Flooring Replacement">Replace with LVP Flooring ($5,000 | +10% Value)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-500 uppercase mb-2">⚠️ Structural & System Hazards (Check if Required)</label>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-lg border border-gray-200">
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
+                                    <input type="checkbox" id="chkSeptic" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
+                                    <span>Septic System Replacement ($20,000 | +8%)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
+                                    <input type="checkbox" id="chkFoundation" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
+                                    <span>Foundation Structural Repair ($18,000 | +8%)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
+                                    <input type="checkbox" id="chkHeating" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
+                                    <span>New Heating System ($7,000 | +8%)</span>
+                                </label>
+                                <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
+                                    <input type="checkbox" id="chkElectrical" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
+                                    <span>Complete Electrical Work ($6,000 | +4%)</span>
+                                </label>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -115,18 +166,18 @@
 
                 <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <button onclick="toggleAccordion('accExit')" class="w-full bg-slate-50 hover:bg-slate-100 p-4 font-bold text-left text-slate-800 flex justify-between items-center cursor-pointer transition">
-                        <span class="flex items-center gap-2">🚪 4. Exit Strategy & Selling Costs</span>
+                        <span class="flex items-center gap-2">🚪 4. Exit Strategy & Realtor Fees</span>
                         <span id="icon-accExit" class="transform transition-transform duration-200 text-gray-400">▼</span>
                     </button>
                     <div id="accExit" class="accordion-content p-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-semibold text-gray-500 uppercase">After Repair Value (ARV / Sale Price) ($)</label>
-                            <input type="number" id="arv" value="320000" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateAll()">
+                            <label class="block text-xs font-semibold text-gray-500 uppercase">Calculated ARV (Based on Upgrades) ($)</label>
+                            <input type="text" id="lblCalculatedARV" readonly class="w-full mt-1 p-2 border bg-gray-100 rounded-md font-bold text-slate-800">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Realtor / Selling Fees (%)</label>
                             <input type="number" id="realtorFeePct" value="5.0" step="0.1" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1">Calculated Selling Fees: <span id="lblCalculatedSelling" class="font-semibold text-gray-600">$0</span></p>
+                            <p class="text-xs text-gray-400 mt-1">Calculated Fees: <span id="lblCalculatedSelling" class="font-semibold text-gray-600">$0</span></p>
                         </div>
                     </div>
                 </div>
@@ -138,6 +189,10 @@
                     <h2 class="text-lg font-bold text-blue-400 mb-4 tracking-wide uppercase text-xs">Deal Underwriting Dashboard</h2>
                     
                     <div class="space-y-3 text-sm text-slate-300">
+                        <div class="flex justify-between border-b border-slate-800 pb-2">
+                            <span>Computed ARV:</span>
+                            <span class="font-mono text-emerald-400 font-bold" id="lblDashARV">$0</span>
+                        </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
                             <span>Down Payment Outlay:</span>
                             <span class="font-mono text-white" id="lblSummaryDown">$0</span>
@@ -179,7 +234,7 @@
 
         <div class="mt-8 border-t border-gray-200 pt-6">
             <h3 class="text-lg font-bold text-slate-900 mb-2 flex items-center gap-2">📊 "What-If" Timeline Risk Matrix</h3>
-            <p class="text-xs text-gray-500 mb-4">Flipped properties often hit unexpected construction delays. Here is how holding cost slippage degrades your net profit and cash ROI.</p>
+            <p class="text-xs text-gray-500 mb-4">See how unexpected timeline slippage bleeds holding costs and impacts performance.</p>
             
             <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
                 <table class="w-full text-sm text-left text-gray-500">
@@ -229,69 +284,98 @@
     </div>
 
     <script>
-        // Toggle function for Accordions
         function toggleAccordion(id) {
             const block = document.getElementById(id);
             const icon = document.getElementById(`icon-${id}`);
-            
             block.classList.toggle('open');
-            if(block.classList.contains('open')) {
-                icon.style.transform = "rotate(180deg)";
-            } else {
-                icon.style.transform = "rotate(0deg)";
-            }
+            icon.style.transform = block.classList.contains('open') ? "rotate(180deg)" : "rotate(0deg)";
         }
 
-        // Calculation Master Control
+        function getDropdownValues(id) {
+            const element = document.getElementById(id);
+            const values = element.value.split(',');
+            return {
+                cost: parseFloat(values[0]) || 0,
+                pct: parseFloat(values[1]) || 0,
+                name: values[2] || ""
+            };
+        }
+
         function calculateAll() {
-            // Read UI Elements
+            // Acquisition Inputs
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+            const baseValue = parseFloat(document.getElementById('baseValue').value) || 0;
             const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) || 0;
             const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) || 0;
             const timeline = parseFloat(document.getElementById('timeline').value) || 0;
             const holdingCostsPerMonth = parseFloat(document.getElementById('holdingCosts').value) || 0;
-            const arv = parseFloat(document.getElementById('arv').value) || 0;
             const realtorFeePct = parseFloat(document.getElementById('realtorFeePct').value) || 0;
 
-            // Total Rehab Aggregator Loop
+            // Aggregating select element strategies
             let totalRehab = 0;
-            for(let i = 1; i <= 7; i++) {
-                totalRehab += parseFloat(document.getElementById(`repAmt${i}`).value) || 0;
-            }
+            let totalValueIncreasePct = 0;
+            let chosenUpgrades = [];
 
-            // Calculation Logic 
+            const dropdowns = ['optWindows', 'optRoof', 'optKitchen', 'optBathroom', 'optLandscape', 'optFlooring'];
+            dropdowns.forEach(id => {
+                const data = getDropdownValues(id);
+                totalRehab += data.cost;
+                totalValueIncreasePct += data.pct;
+                if(data.cost > 0) chosenUpgrades.push(`${data.name} (+$${data.cost.toLocaleString()})`);
+            });
+
+            // Aggregating Checkbox Hazards
+            const hazards = [
+                { id: 'chkSeptic', cost: 20000, pct: 8, name: 'Septic System' },
+                { id: 'chkFoundation', cost: 18000, pct: 8, name: 'Foundation Repair' },
+                { id: 'chkHeating', cost: 7000, pct: 8, name: 'Heating System' },
+                { id: 'chkElectrical', cost: 6000, pct: 4, name: 'Electrical Work' }
+            ];
+
+            hazards.forEach(h => {
+                if(document.getElementById(h.id).checked) {
+                    totalRehab += h.cost;
+                    totalValueIncreasePct += h.pct;
+                    chosenUpgrades.push(`${h.name} (+$${h.cost.toLocaleString()})`);
+                }
+            });
+
+            // Dynamic Formula: ARV expands relative to cumulative item improvements!
+            const arv = baseValue * (1 + (totalValueIncreasePct / 100));
+
+            // Financial Calculations
             const downPaymentAmount = purchasePrice * (downPaymentPct / 100);
             const buyingClosingCosts = purchasePrice * (closingCostPct / 100);
             const totalHoldingCosts = timeline * holdingCostsPerMonth;
             const sellingFeesAmount = arv * (realtorFeePct / 100);
 
-            // Comprehensive Costs Accumulation
             const totalAllInCost = purchasePrice + totalRehab + buyingClosingCosts + totalHoldingCosts + sellingFeesAmount;
             const totalOutofPocketEquity = downPaymentAmount + buyingClosingCosts + totalRehab + totalHoldingCosts;
             
             const netProfit = arv - totalAllInCost;
             const roi = totalOutofPocketEquity > 0 ? (netProfit / totalOutofPocketEquity) * 100 : 0;
 
-            // Update Primary Display Variables
+            // Sync Read-Only elements & Sub-labels
+            document.getElementById('lblCalculatedARV').value = `$${Math.round(arv).toLocaleString()}`;
+            document.getElementById('lblDashARV').innerText = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblCalculatedClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
-            document.getElementById('lblCalculatedSelling').innerText = `$${sellingFeesAmount.toLocaleString()}`;
+            document.getElementById('lblCalculatedSelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
 
-            // Sync Performance Dashboard
+            // Sync Right Dashboard Metrics
             document.getElementById('lblSummaryDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
             document.getElementById('lblSummaryClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblSummaryRehab').innerText = `$${totalRehab.toLocaleString()}`;
             document.getElementById('lblMonths').innerText = timeline;
             document.getElementById('lblTotalHolding').innerText = `$${totalHoldingCosts.toLocaleString()}`;
-            document.getElementById('lblSummarySelling').innerText = `$${sellingFeesAmount.toLocaleString()}`;
+            document.getElementById('lblSummarySelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
             document.getElementById('lblTotalEquity').innerText = `$${totalOutofPocketEquity.toLocaleString()}`;
             document.getElementById('lblNetProfit').innerText = `$${netProfit.toLocaleString()}`;
             document.getElementById('lblROI').innerText = `${roi.toFixed(1)}%`;
 
-            // Adjust Color Dynamically
             document.getElementById('lblNetProfit').className = netProfit >= 0 ? "text-4xl font-black text-emerald-400 mt-1" : "text-4xl font-black text-rose-500 mt-1";
 
-            // 70% Real Estate Rule Assessment
+            // Underwrite Max Recommended Guidelines
             const maxAllowableOffer = (arv * 0.7) - totalRehab;
             const ruleBox = document.getElementById('ruleBox');
             if (purchasePrice <= maxAllowableOffer) {
@@ -302,7 +386,7 @@
                 ruleBox.innerText = `⚠️ Exceeds 70% Rule (Max Offer: $${Math.round(maxAllowableOffer).toLocaleString()})`;
             }
 
-            // POPULATE RISK MATRIX TABLE VALUES
+            // Sync Timeline risk matrix rows
             const delays = [0, 2, 4, 6];
             delays.forEach(d => {
                 const totalMonths = timeline + d;
@@ -313,19 +397,20 @@
                 const adjustedROI = adjustedEquity > 0 ? (adjustedProfit / adjustedEquity) * 100 : 0;
 
                 document.getElementById(`t${d}_months`).innerText = totalMonths;
-                if(d > 0) {
-                    document.getElementById(`t${d}_added`).innerText = `+$${addedHold.toLocaleString()}`;
-                }
+                if(d > 0) document.getElementById(`t${d}_added`).innerText = `+$${addedHold.toLocaleString()}`;
                 
                 const pLabel = document.getElementById(`t${d}_profit`);
                 pLabel.innerText = `$${adjustedProfit.toLocaleString()}`;
                 pLabel.className = adjustedProfit >= 0 ? "px-6 py-4 text-right font-mono font-bold text-emerald-600" : "px-6 py-4 text-right font-mono font-bold text-rose-600";
-                
                 document.getElementById(`t${d}_roi`).innerText = `${adjustedROI.toFixed(1)}%`;
             });
+
+            // Store upgrades globally for PDF mapping
+            window.activeUpgradesList = chosenUpgrades;
+            window.activeTotalRehab = totalRehab;
+            window.activeARV = arv;
         }
 
-        // High Quality PDF PDF Exporter Routine
         function generatePDF() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -334,57 +419,56 @@
             const getTxt = (id) => document.getElementById(id).innerText;
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.text("Fix & Flip Property Underwriting Report", 14, 20);
+            doc.setFontSize(20);
+            doc.text("Fix & Flip Valuation and Strategy Report", 14, 20);
             
             doc.setFontSize(10);
             doc.setFont("helvetica", "normal");
-            doc.text(`Analysis Date: ${new Date().toLocaleDateString()} | Underwriter Summary`, 14, 26);
+            doc.text(`Analysis Execution Date: ${new Date().toLocaleDateString()}`, 14, 26);
             doc.line(14, 30, 196, 30);
 
-            // Row Metrics Metadata
             doc.setFont("helvetica", "bold");
             doc.setFontSize(12);
-            doc.text("Project Underwriting Benchmarks", 14, 40);
+            doc.text("1. Capital Structure Summary", 14, 40);
             doc.setFont("helvetica", "normal");
             doc.text(`Purchase Price: $${parseFloat(getVal('purchasePrice')).toLocaleString()}`, 14, 48);
-            doc.text(`Down Payment Capital Allocation: ${getTxt('lblCalculatedDown')}`, 14, 55);
-            doc.text(`Initial Acquisition Costs: ${getTxt('lblCalculatedClosing')}`, 14, 62);
-            doc.text(`Projected Exit ARV: $${parseFloat(getVal('arv')).toLocaleString()}`, 14, 69);
-            doc.text(`Exit Realtor Broker Fees: ${getTxt('lblCalculatedSelling')}`, 14, 76);
+            doc.text(`Out-of-Pocket Down Payment: ${getTxt('lblCalculatedDown')}`, 14, 55);
+            doc.text(`Baseline Unrehabbed Value: $${parseFloat(getVal('baseValue')).toLocaleString()}`, 14, 62);
+            doc.text(`Calculated After-Repair-Value (ARV): $${Math.round(window.activeARV).toLocaleString()}`, 14, 69);
 
-            // Construction Table Header
             doc.setFont("helvetica", "bold");
-            doc.text("Itemized Capital Improvement Budget", 14, 90);
+            doc.text("2. Chosen Renovation Strategies", 14, 82);
             doc.setFont("helvetica", "normal");
             
-            let y = 98;
-            for(let i = 1; i <= 7; i++) {
-                doc.text(`• ${getVal(`repItem${i}`)}:`, 18, y);
-                doc.text(`$${(parseFloat(getVal(`repAmt${i}`)) || 0).toLocaleString()}`, 140, y, { align: "right" });
+            let y = 90;
+            if(window.activeUpgradesList.length === 0) {
+                doc.text("• No upgrade items chosen.", 18, y);
                 y += 7;
+            } else {
+                window.activeUpgradesList.forEach(item => {
+                    doc.text(`• ${item}`, 18, y);
+                    y += 7;
+                });
             }
+            
             doc.setFont("helvetica", "bold");
-            doc.text(`Total Construction Hard Costs:`, 14, y + 2);
-            doc.text(`${getTxt('lblSummaryRehab')}`, 140, y + 2, { align: "right" });
+            doc.text(`Total Construction Hard Costs: $${window.activeTotalRehab.toLocaleString()}`, 14, y + 3);
 
-            doc.line(14, y + 7, 196, y + 7);
+            doc.line(14, y + 8, 196, y + 8);
 
-            // Bottom-line Projections Header
-            doc.text("Target Schedule Financial Projections", 14, y + 17);
+            doc.text("3. Target Projections Overview", 14, y + 18);
             doc.setFont("helvetica", "normal");
-            doc.text(`Total Out-of-Pocket Cash Required: ${getTxt('lblTotalEquity')}`, 14, y + 25);
-            doc.text(`Projected Holding Costs Baseline: ${getTxt('lblTotalHolding')} (${getVal('timeline')} Months)`, 14, y + 32);
+            doc.text(`Total Cash Allocation Needed: ${getTxt('lblTotalEquity')}`, 14, y + 26);
+            doc.text(`Exit Realtor Charges: ${getTxt('lblCalculatedSelling')}`, 14, y + 33);
             
             doc.setFontSize(14);
             doc.setFont("helvetica", "bold");
-            doc.text(`TARGET NET DEAL CASH PROFIT: ${getTxt('lblNetProfit')}`, 14, y + 45);
-            doc.text(`TARGET CASH-ON-CASH ROI: ${getTxt('lblROI')}`, 14, y + 53);
+            doc.text(`PROJECTED STRATEGY NET PROFIT: ${getTxt('lblNetProfit')}`, 14, y + 46);
+            doc.text(`PROJECTED CASH-ON-CASH ROI: ${getTxt('lblROI')}`, 14, y + 54);
 
-            doc.save("Professional-Flip-Investment-Analysis.pdf");
+            doc.save("Flip-Valuation-Analysis-Report.pdf");
         }
 
-        // Initialize execution on runtime
         calculateAll();
     </script>
 </body>
