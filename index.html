@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fix & Flip Market Analyzer</title>
+    <title>Fix & Flip Strategy & Market Analyzer</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
@@ -23,7 +23,7 @@
         <div class="border-b pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-3xl font-black text-slate-900 tracking-tight">House Flipping Investing Calculator</h1>
-                <p class="text-gray-500 mt-1">Entrepreneurship & Market Research Underwriting Tool.</p>
+                <p class="text-gray-500 mt-1">Dynamic upgrade decision matrix & value addition simulator.</p>
             </div>
             <button onclick="generatePDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow transition duration-200 cursor-pointer text-sm flex items-center gap-2">
                 📄 Export Presentation PDF
@@ -61,54 +61,54 @@
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪟 Windows Strategy</label>
                             <select id="optWindows" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                <option value="0,No Work Done">No Work Done ($0)</option>
-                                <option value="4500,Window Repair">Window Repair ($4,500)</option>
-                                <option value="15000,Replacement Windows">Replacement Windows ($15,000)</option>
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="4500,3,Window Repair">Window Repair ($4,500 | +3% Value)</option>
+                                <option value="15000,10,Replacement Windows">Replacement Windows ($15,000 | +10% Value)</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Roof Strategy</label>
                             <select id="optRoof" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                <option value="0,No Work Done">No Work Done ($0)</option>
-                                <option value="2500,Roof Repairs">Roof Repairs ($2,500)</option>
-                                <option value="12000,Roof Replacement">Roof Replacement ($12,000)</option>
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="2500,4,Roof Repairs">Roof Repairs ($2,500 | +4% Value)</option>
+                                <option value="12000,10,Roof Replacement">Roof Replacement ($12,000 | +10% Value)</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🍳 Kitchen Rehab</label>
                             <select id="optKitchen" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                <option value="0,No Work Done">No Work Done ($0)</option>
-                                <option value="14000,Kitchen Rehab (Low Cost)">Kitchen Rehab - Low Cost ($14,000 | Formica)</option>
-                                <option value="18000,Kitchen Rehab (Mid Line)">Kitchen Rehab - Mid Line ($18,000 | Mock Granite)</option>
-                                <option value="24000,Kitchen Rehab (High End)">Kitchen Rehab - High End ($24,000 | Granite)</option>
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="14000,7,Kitchen Rehab (Low Cost)">Kitchen Rehab - Low Cost ($14,000 | +7% Value)</option>
+                                <option value="18000,9,Kitchen Rehab (Mid Line)">Kitchen Rehab - Mid Line ($18,000 | +9% Value)</option>
+                                <option value="24000,12,Kitchen Rehab (High End)">Kitchen Rehab - High End ($24,000 | +12% Value)</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🛁 Bathroom Rehab</label>
                             <select id="optBathroom" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                <option value="0,No Work Done">No Work Done ($0)</option>
-                                <option value="4500,Bathroom Rehab (Half Bath)">Half Bathroom Rehab ($4,500)</option>
-                                <option value="7500,Bathroom Rehab (Full)">Full Bathroom Rehab ($7,500)</option>
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="4500,12,Bathroom Rehab (Half Bath)">Half Bathroom Rehab ($4,500 | +12% Value)</option>
+                                <option value="7500,12,Bathroom Rehab (Full)">Full Bathroom Rehab ($7,500 | +12% Value)</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🌳 Landscaping Strategy</label>
                             <select id="optLandscape" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                <option value="0,No Work Done">No Work Done ($0)</option>
-                                <option value="3000,Basic Landscape Work">Basic Landscape Work ($3,000)</option>
-                                <option value="8000,Advanced Landscape Work">Advanced Landscape Work ($8,000 | Paver Patio)</option>
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="3000,5,Basic Landscape Work">Basic Landscape Work ($3,000 | +5% Value)</option>
+                                <option value="8000,7,Advanced Landscape Work">Advanced Landscape Work ($8,000 | +7% Value)</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Flooring</label>
                             <select id="optFlooring" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                <option value="0,No Work Done">No Work Done ($0)</option>
-                                <option value="5000,Flooring Replacement">Replace with LVP Flooring ($5,000)</option>
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="5000,10,Flooring Replacement">Replace with LVP Flooring ($5,000 | +10% Value)</option>
                             </select>
                         </div>
 
@@ -117,19 +117,19 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-lg border border-gray-200">
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
                                     <input type="checkbox" id="chkSeptic" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
-                                    <span>Septic System Replacement ($20,000)</span>
+                                    <span>Septic System Replacement ($20,000 | +8% Value)</span>
                                 </label>
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                                    <input type="checkbox" id="chkFoundation" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
-                                    <span>Foundation Structural Repair ($18,000)</span>
+                                    <input type="checkbox" id="chkFoundation" class="w-4 h-4 text-blue-600 rounded" onchange="changeHazard('chkFoundation', 18000, 8)">
+                                    <span>Foundation Structural Repair ($18,000 | +8% Value)</span>
                                 </label>
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
                                     <input type="checkbox" id="chkHeating" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
-                                    <span>New Heating System ($7,000)</span>
+                                    <span>New Heating System ($7,000 | +8% Value)</span>
                                 </label>
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
                                     <input type="checkbox" id="chkElectrical" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
-                                    <span>Complete Electrical Work ($6,000)</span>
+                                    <span>Complete Electrical Work ($6,000 | +4% Value)</span>
                                 </label>
                             </div>
                         </div>
@@ -161,14 +161,14 @@
 
                 <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <button onclick="toggleAccordion('accExit')" class="w-full bg-slate-50 hover:bg-slate-100 p-4 font-bold text-left text-slate-800 flex justify-between items-center cursor-pointer transition">
-                        <span class="flex items-center gap-2">🚪 4. Exit Strategy & Zillow Valuation</span>
+                        <span class="flex items-center gap-2">🚪 4. Exit Strategy & Valuation Results</span>
                         <span id="icon-accExit" class="transform transition-transform duration-200 text-gray-400">▼</span>
                     </button>
                     <div id="accExit" class="accordion-content p-4 border-t border-gray-100 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-blue-600 uppercase">Estimated Resale Price (ARV via Zillow) ($)</label>
-                            <input type="number" id="arv" value="320000" class="w-full mt-1 p-2 border-2 border-blue-500 rounded-md font-bold text-slate-800 focus:ring-2 focus:ring-blue-600" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1">Students: Research nearby completed sales to fill this out.</p>
+                            <label class="block text-xs font-bold text-emerald-600 uppercase">Computed Resale Value (ARV) ($)</label>
+                            <input type="text" id="lblCalculatedARV" readonly class="w-full mt-1 p-2 border bg-gray-100 rounded-md font-bold text-slate-800">
+                            <p class="text-xs text-gray-400 mt-1">Automatically scaled up from Purchase Price based on upgrades.</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Realtor / Selling Fees (%)</label>
@@ -186,8 +186,12 @@
                     
                     <div class="space-y-3 text-sm text-slate-300">
                         <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span>Your Target Resale (ARV):</span>
+                            <span>Computed Value (ARV):</span>
                             <span class="font-mono text-emerald-400 font-bold" id="lblDashARV">$0</span>
+                        </div>
+                        <div class="flex justify-between border-b border-slate-800 pb-2">
+                            <span>Total Added Value (%):</span>
+                            <span class="font-mono text-yellow-400 font-bold" id="lblDashPct">+0%</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
                             <span>Down Payment Outlay:</span>
@@ -198,7 +202,7 @@
                             <span class="font-mono text-white" id="lblSummaryClosing">$0</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span>Total Rehab Budget:</span>
+                            <span>Total Rehab Budget (Expense):</span>
                             <span class="font-mono text-white" id="lblSummaryRehab">$0</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
@@ -292,65 +296,74 @@
             const values = element.value.split(',');
             return {
                 cost: parseFloat(values[0]) || 0,
-                name: values[1] || ""
+                pct: parseFloat(values[1]) || 0,
+                name: values[2] || ""
             };
         }
 
         function calculateAll() {
-            // Manual Pricing Inputs
+            // Master Financial Inputs
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) || 0;
             const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) || 0;
             const timeline = parseFloat(document.getElementById('timeline').value) || 0;
             const holdingCostsPerMonth = parseFloat(document.getElementById('holdingCosts').value) || 0;
-            const arv = parseFloat(document.getElementById('arv').value) || 0; // USER ESTIMATED ARV
             const realtorFeePct = parseFloat(document.getElementById('realtorFeePct').value) || 0;
 
-            // Aggregating construction budgets
+            // Aggregating construction budgets & cumulative equity percentages
             let totalRehab = 0;
+            let totalValueIncreasePct = 0;
             let chosenUpgrades = [];
 
             const dropdowns = ['optWindows', 'optRoof', 'optKitchen', 'optBathroom', 'optLandscape', 'optFlooring'];
             dropdowns.forEach(id => {
                 const data = getDropdownValues(id);
                 totalRehab += data.cost;
+                totalValueIncreasePct += data.pct;
                 if(data.cost > 0) chosenUpgrades.push(`${data.name} (+$${data.cost.toLocaleString()})`);
             });
 
-            // Checking Core Hazards
+            // Checking Core Structural Hazards
             const hazards = [
-                { id: 'chkSeptic', cost: 20000, name: 'Septic System' },
-                { id: 'chkFoundation', cost: 18000, name: 'Foundation Repair' },
-                { id: 'chkHeating', cost: 7000, name: 'Heating System' },
-                { id: 'chkElectrical', cost: 6000, name: 'Electrical Work' }
+                { id: 'chkSeptic', cost: 20000, pct: 8, name: 'Septic System' },
+                { id: 'chkFoundation', cost: 18000, pct: 8, name: 'Foundation Repair' },
+                { id: 'chkHeating', cost: 7000, pct: 8, name: 'Heating System' },
+                { id: 'chkElectrical', cost: 6000, pct: 4, name: 'Electrical Work' }
             ];
 
             hazards.forEach(h => {
                 if(document.getElementById(h.id).checked) {
                     totalRehab += h.cost;
+                    totalValueIncreasePct += h.pct;
                     chosenUpgrades.push(`${h.name} (+$${h.cost.toLocaleString()})`);
                 }
             });
 
-            // Financial Calculations
+            // DYNAMIC FORMULA: Resale Price (ARV) automatically scales from original Purchase Price baseline!
+            const arv = purchasePrice * (1 + (totalValueIncreasePct / 100));
+
+            // Business Operational Formulas
             const downPaymentAmount = purchasePrice * (downPaymentPct / 100);
             const buyingClosingCosts = purchasePrice * (closingCostPct / 100);
             const totalHoldingCosts = timeline * holdingCostsPerMonth;
             const sellingFeesAmount = arv * (realtorFeePct / 100);
 
+            // Expense totals incurred by investor
             const totalAllInCost = purchasePrice + totalRehab + buyingClosingCosts + totalHoldingCosts + sellingFeesAmount;
             const totalOutofPocketEquity = downPaymentAmount + buyingClosingCosts + totalRehab + totalHoldingCosts;
             
             const netProfit = arv - totalAllInCost;
             const roi = totalOutofPocketEquity > 0 ? (netProfit / totalOutofPocketEquity) * 100 : 0;
 
-            // Sync Dynamic Displays
+            // Update Dynamic Inputs & Output UI Fields
+            document.getElementById('lblCalculatedARV').value = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblDashARV').innerText = `$${Math.round(arv).toLocaleString()}`;
+            document.getElementById('lblDashPct').innerText = `+${totalValueIncreasePct}%`;
             document.getElementById('lblCalculatedClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
             document.getElementById('lblCalculatedSelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
 
-            // Sync Dashboard Status Box
+            // Update Side Performance Matrix Dashboard
             document.getElementById('lblSummaryDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
             document.getElementById('lblSummaryClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblSummaryRehab').innerText = `$${totalRehab.toLocaleString()}`;
@@ -363,7 +376,7 @@
 
             document.getElementById('lblNetProfit').className = netProfit >= 0 ? "text-4xl font-black text-emerald-400 mt-1" : "text-4xl font-black text-rose-500 mt-1";
 
-            // Underwrite Guidelines
+            // Underwrite Rule of Thumb Logic
             const maxAllowableOffer = (arv * 0.7) - totalRehab;
             const ruleBox = document.getElementById('ruleBox');
             if (purchasePrice <= maxAllowableOffer) {
@@ -374,7 +387,7 @@
                 ruleBox.innerText = `⚠️ Exceeds 70% Rule (Max Offer: $${Math.round(maxAllowableOffer).toLocaleString()})`;
             }
 
-            // Matrix Loops
+            // Sync Timeline risk matrix rows
             const delays = [0, 2, 4, 6];
             delays.forEach(d => {
                 const totalMonths = timeline + d;
@@ -420,7 +433,8 @@
             doc.setFont("helvetica", "normal");
             doc.text(`Purchase Price: $${parseFloat(getVal('purchasePrice')).toLocaleString()}`, 14, 48);
             doc.text(`Out-of-Pocket Down Payment: ${getTxt('lblCalculatedDown')}`, 14, 55);
-            doc.text(`Estimated Resale Value (Zillow Comp): $${Math.round(window.activeARV).toLocaleString()}`, 14, 69);
+            doc.text(`Calculated Valuation Boost: ${getTxt('lblDashPct')}`, 14, 62);
+            doc.text(`Estimated Resale Value (ARV): $${Math.round(window.activeARV).toLocaleString()}`, 14, 69);
 
             doc.setFont("helvetica", "bold");
             doc.text("2. Chosen Renovation Strategies", 14, 82);
@@ -438,7 +452,7 @@
             }
             
             doc.setFont("helvetica", "bold");
-            doc.text(`Total Construction Hard Costs: $${window.activeTotalRehab.toLocaleString()}`, 14, y + 3);
+            doc.text(`Total Construction Expenses: $${window.activeTotalRehab.toLocaleString()}`, 14, y + 3);
 
             doc.line(14, y + 8, 196, y + 8);
 
