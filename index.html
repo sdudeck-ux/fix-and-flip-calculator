@@ -62,8 +62,8 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪟 Windows Strategy</label>
                             <select id="optWindows" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                 <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                <option value="4500,3,Window Repair">Window Repair ($4,500 | +3% Value)</option>
-                                <option value="15000,10,Replacement Windows">Replacement Windows ($15,000 | +10% Value)</option>
+                                <option value="4500,4.5,Window Repair">Window Repair ($4,500 | +4.5% Value)</option>
+                                <option value="15000,15,Replacement Windows">Replacement Windows ($15,000 | +15% Value)</option>
                             </select>
                         </div>
 
@@ -71,8 +71,8 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Roof Strategy</label>
                             <select id="optRoof" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                 <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                <option value="2500,4,Roof Repairs">Roof Repairs ($2,500 | +4% Value)</option>
-                                <option value="12000,10,Roof Replacement">Roof Replacement ($12,000 | +10% Value)</option>
+                                <option value="2500,6,Roof Repairs">Roof Repairs ($2,500 | +6% Value)</option>
+                                <option value="12000,15,Roof Replacement">Roof Replacement ($12,000 | +15% Value)</option>
                             </select>
                         </div>
 
@@ -80,9 +80,9 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🍳 Kitchen Rehab</label>
                             <select id="optKitchen" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                 <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                <option value="14000,7,Kitchen Rehab (Low Cost)">Kitchen Rehab - Low Cost ($14,000 | +7% Value)</option>
-                                <option value="18000,9,Kitchen Rehab (Mid Line)">Kitchen Rehab - Mid Line ($18,000 | +9% Value)</option>
-                                <option value="24000,12,Kitchen Rehab (High End)">Kitchen Rehab - High End ($24,000 | +12% Value)</option>
+                                <option value="14000,10.5,Kitchen Rehab (Low Cost)">Kitchen Rehab - Low Cost ($14,000 | +10.5% Value)</option>
+                                <option value="18000,13.5,Kitchen Rehab (Mid Line)">Kitchen Rehab - Mid Line ($18,000 | +13.5% Value)</option>
+                                <option value="24000,18,Kitchen Rehab (High End)">Kitchen Rehab - High End ($24,000 | +18% Value)</option>
                             </select>
                         </div>
 
@@ -90,8 +90,8 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🛁 Bathroom Rehab</label>
                             <select id="optBathroom" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                 <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                <option value="4500,12,Bathroom Rehab (Half Bath)">Half Bathroom Rehab ($4,500 | +12% Value)</option>
-                                <option value="7500,12,Bathroom Rehab (Full)">Full Bathroom Rehab ($7,500 | +12% Value)</option>
+                                <option value="4500,18,Bathroom Rehab (Half Bath)">Half Bathroom Rehab ($4,500 | +18% Value)</option>
+                                <option value="7500,18,Bathroom Rehab (Full)">Full Bathroom Rehab ($7,500 | +18% Value)</option>
                             </select>
                         </div>
 
@@ -99,8 +99,8 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🌳 Landscaping Strategy</label>
                             <select id="optLandscape" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                 <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                <option value="3000,5,Basic Landscape Work">Basic Landscape Work ($3,000 | +5% Value)</option>
-                                <option value="8000,7,Advanced Landscape Work">Advanced Landscape Work ($8,000 | +7% Value)</option>
+                                <option value="3000,7.5,Basic Landscape Work">Basic Landscape Work ($3,000 | +7.5% Value)</option>
+                                <option value="8000,10.5,Advanced Landscape Work">Advanced Landscape Work ($8,000 | +10.5% Value)</option>
                             </select>
                         </div>
 
@@ -108,7 +108,7 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Flooring</label>
                             <select id="optFlooring" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                 <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                <option value="5000,10,Flooring Replacement">Replace with LVP Flooring ($5,000 | +10% Value)</option>
+                                <option value="5000,15,Flooring Replacement">Replace with LVP Flooring ($5,000 | +15% Value)</option>
                             </select>
                         </div>
 
@@ -117,19 +117,19 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3 bg-slate-50 p-3 rounded-lg border border-gray-200">
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
                                     <input type="checkbox" id="chkSeptic" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
-                                    <span>Septic System Replacement ($20,000 | +8% Value)</span>
+                                    <span>Septic System Replacement ($20,000 | +12% Value)</span>
                                 </label>
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
-                                    <input type="checkbox" id="chkFoundation" class="w-4 h-4 text-blue-600 rounded" onchange="changeHazard('chkFoundation', 18000, 8)">
-                                    <span>Foundation Structural Repair ($18,000 | +8% Value)</span>
+                                    <input type="checkbox" id="chkFoundation" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
+                                    <span>Foundation Structural Repair ($18,000 | +12% Value)</span>
                                 </label>
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
                                     <input type="checkbox" id="chkHeating" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
-                                    <span>New Heating System ($7,000 | +8% Value)</span>
+                                    <span>New Heating System ($7,000 | +12% Value)</span>
                                 </label>
                                 <label class="flex items-center space-x-2 text-sm text-gray-700 cursor-pointer">
                                     <input type="checkbox" id="chkElectrical" class="w-4 h-4 text-blue-600 rounded" onchange="calculateAll()">
-                                    <span>Complete Electrical Work ($6,000 | +4% Value)</span>
+                                    <span>Complete Electrical Work ($6,000 | +6% Value)</span>
                                 </label>
                             </div>
                         </div>
@@ -325,10 +325,10 @@
 
             // Checking Core Structural Hazards
             const hazards = [
-                { id: 'chkSeptic', cost: 20000, pct: 8, name: 'Septic System' },
-                { id: 'chkFoundation', cost: 18000, pct: 8, name: 'Foundation Repair' },
-                { id: 'chkHeating', cost: 7000, pct: 8, name: 'Heating System' },
-                { id: 'chkElectrical', cost: 6000, pct: 4, name: 'Electrical Work' }
+                { id: 'chkSeptic', cost: 20000, pct: 12, name: 'Septic System' },
+                { id: 'chkFoundation', cost: 18000, pct: 12, name: 'Foundation Repair' },
+                { id: 'chkHeating', cost: 7000, pct: 12, name: 'Heating System' },
+                { id: 'chkElectrical', cost: 6000, pct: 6, name: 'Electrical Work' }
             ];
 
             hazards.forEach(h => {
@@ -357,7 +357,7 @@
 
             // Update Dynamic Inputs & Output UI Fields
             document.getElementById('lblCalculatedARV').value = `$${Math.round(arv).toLocaleString()}`;
-            document.getElementById('lblDashARV').innerText = `$${Math.round(arv).toLocaleString()}`;
+            document.getElementById('lblDynamicARV').innerText = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblDashPct').innerText = `+${totalValueIncreasePct}%`;
             document.getElementById('lblCalculatedClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
@@ -469,7 +469,14 @@
             doc.save("Flip-Valuation-Analysis-Report.pdf");
         }
 
-        calculateAll();
+        // Fix tracking issue in right column template binding
+        document.addEventListener("DOMContentLoaded", function() {
+            var dashARV = document.getElementById('lblDashARV');
+            if(!dashARV && document.getElementById('lblDynamicARV')) {
+                document.getElementById('lblDynamicARV').id = 'lblDashARV';
+            }
+            calculateAll();
+        });
     </script>
 </body>
 </html>
