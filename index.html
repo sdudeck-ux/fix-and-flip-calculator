@@ -13,7 +13,7 @@
             transition: max-height 0.3s ease-out, padding 0.3s ease-out;
         }
         .accordion-content.open {
-            max-height: 1200px;
+            max-height: 1500px;
         }
     </style>
 </head>
@@ -58,6 +58,23 @@
                     </button>
                     <div id="accRehab" class="accordion-content p-4 border-t border-gray-100 space-y-4 bg-white">
                         
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🎨 Interior Painting</label>
+                            <select id="optInteriorPaint" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Interior Paint ($0 | +0%)</option>
+                                <option value="8000,18,Full Interior Paint">Paint Entire Interior ($8,000 | +18% Value)</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🏡 Exterior Wall Strategy</label>
+                            <select id="optExteriorWall" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Exterior Work ($0 | +0%)</option>
+                                <option value="12000,18,Exterior Paint">Paint Exterior ($12,000 | +18% Value)</option>
+                                <option value="18000,20,Vinyl Siding">Install Vinyl Siding ($18,000 | +20% Value)</option>
+                            </select>
+                        </div>
+
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪟 Windows Strategy</label>
                             <select id="optWindows" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
@@ -315,7 +332,8 @@
             let totalValueIncreasePct = 0;
             let chosenUpgrades = [];
 
-            const dropdowns = ['optWindows', 'optRoof', 'optKitchen', 'optBathroom', 'optLandscape', 'optFlooring'];
+            // Updated dropdown list to include the two new painting/siding metrics
+            const dropdowns = ['optInteriorPaint', 'optExteriorWall', 'optWindows', 'optRoof', 'optKitchen', 'optBathroom', 'optLandscape', 'optFlooring'];
             dropdowns.forEach(id => {
                 const data = getDropdownValues(id);
                 totalRehab += data.cost;
