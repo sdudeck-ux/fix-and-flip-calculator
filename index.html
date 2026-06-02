@@ -49,7 +49,7 @@
         <div class="no-print border-b pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h1 class="text-3xl font-black text-slate-900 tracking-tight">House Flipping Investing Calculator</h1>
-                <p class="text-gray-500 mt-1">Dynamic upgrade decision matrix & value addition simulator with volume multipliers.</p>
+                <p class="text-gray-500 mt-1">Dynamic upgrade decision matrix & value addition simulator with bathroom volume multipliers.</p>
             </div>
             <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow transition duration-200 cursor-pointer text-sm flex items-center gap-2">
                 📄 Export & Download PDF Report
@@ -95,82 +95,57 @@
 
                 <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <div class="bg-slate-50 p-4 font-bold text-slate-800 border-b border-gray-200">
-                        <span class="flex items-center gap-2">🔨 2. Rehab Strategy Options (Select Upgrades & Quantities)</span>
+                        <span class="flex items-center gap-2">🔨 2. Rehab Strategy Options (Select Upgrades)</span>
                     </div>
                     <div class="p-4 space-y-4 bg-white">
                         
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🎨 Interior Painting</label>
-                            <div class="flex gap-2">
-                                <select id="optInteriorPaint" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                    <option value="0,0,No Work Done">No Interior Paint ($0 | +0%)</option>
-                                    <option value="8000,18,Full Interior Paint">Paint Entire Interior ($8,000 | +18% Value)</option>
-                                </select>
-                                <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyInteriorPaint" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
-                                </div>
-                            </div>
+                            <select id="optInteriorPaint" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Interior Paint ($0 | +0%)</option>
+                                <option value="8000,18,Full Interior Paint">Paint Entire Interior ($8,000 | +18% Value)</option>
+                            </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🏡 Exterior Wall Strategy</label>
-                            <div class="flex gap-2">
-                                <select id="optExteriorWall" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                    <option value="0,0,No Work Done">No Exterior Work ($0 | +0%)</option>
-                                    <option value="12000,18,Exterior Paint">Paint Exterior ($12,000 | +18% Value)</option>
-                                    <option value="18000,20,Vinyl Siding">Install Vinyl Siding ($18,000 | +20% Value)</option>
-                                </select>
-                                <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyExteriorWall" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
-                                </div>
-                            </div>
+                            <select id="optExteriorWall" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Exterior Work ($0 | +0%)</option>
+                                <option value="12000,18,Exterior Paint">Paint Exterior ($12,000 | +18% Value)</option>
+                                <option value="18000,20,Vinyl Siding">Install Vinyl Siding ($18,000 | +20% Value)</option>
+                            </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪟 Windows Strategy</label>
-                            <div class="flex gap-2">
-                                <select id="optWindows" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                    <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                    <option value="4500,4.5,Window Repair">Window Repair ($4,500 | +4.5% Value)</option>
-                                    <option value="15000,15,Replacement Windows">Replacement Windows ($15,000 | +15% Value)</option>
-                                </select>
-                                <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyWindows" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
-                                </div>
-                            </div>
+                            <select id="optWindows" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="4500,4.5,Window Repair">Window Repair ($4,500 | +4.5% Value)</option>
+                                <option value="15000,15,Replacement Windows">Replacement Windows ($15,000 | +15% Value)</option>
+                            </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Roof Strategy</label>
-                            <div class="flex gap-2">
-                                <select id="optRoof" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                    <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                    <option value="2500,6,Roof Repairs">Roof Repairs ($2,500 | +6% Value)</option>
-                                    <option value="12000,15,Roof Replacement">Roof Replacement ($12,000 | +15% Value)</option>
-                                </select>
-                                <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyRoof" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
-                                </div>
-                            </div>
+                            <select id="optRoof" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="2500,6,Roof Repairs">Roof Repairs ($2,500 | +6% Value)</option>
+                                <option value="12000,15,Roof Replacement">Roof Replacement ($12,000 | +15% Value)</option>
+                            </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🍳 Kitchen Rehab</label>
-                            <div class="flex gap-2">
-                                <select id="optKitchen" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                    <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                    <option value="14000,10.5,Kitchen Rehab (Low Cost)">Kitchen Rehab - Low Cost ($14,000 | +10.5% Value)</option>
-                                    <option value="18000,13.5,Kitchen Rehab (Mid Line)">Kitchen Rehab - Mid Line ($18,000 | +13.5% Value)</option>
-                                    <option value="24000,18,Kitchen Rehab (High End)">Kitchen Rehab - High End ($24,000 | +18% Value)</option>
-                                </select>
-                                <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyKitchen" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
-                                </div>
-                            </div>
+                            <select id="optKitchen" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="14000,10.5,Kitchen Rehab (Low Cost)">Kitchen Rehab - Low Cost ($14,000 | +10.5% Value)</option>
+                                <option value="18000,13.5,Kitchen Rehab (Mid Line)">Kitchen Rehab - Mid Line ($18,000 | +13.5% Value)</option>
+                                <option value="24000,18,Kitchen Rehab (High End)">Kitchen Rehab - High End ($24,000 | +18% Value)</option>
+                            </select>
                         </div>
 
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🛁 Bathroom Rehab</label>
+                            <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🛁 Bathroom Rehab (Adjustable Volume Multiplier)</label>
                             <div class="flex gap-2">
                                 <select id="optBathroom" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                     <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
@@ -178,36 +153,26 @@
                                     <option value="7500,18,Bathroom Rehab (Full)">Full Bathroom Rehab ($7,500 | +18% Value)</option>
                                 </select>
                                 <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyBathroom" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
+                                    <input type="number" id="qtyBathroom" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center font-bold bg-blue-50 border-blue-300 focus:ring-2 focus:ring-blue-500" placeholder="Qty" oninput="calculateAll()">
                                 </div>
                             </div>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🌳 Landscaping Strategy</label>
-                            <div class="flex gap-2">
-                                <select id="optLandscape" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                    <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                    <option value="3000,7.5,Basic Landscape Work">Basic Landscape Work ($3,000 | +7.5% Value)</option>
-                                    <option value="8000,10.5,Advanced Landscape Work">Advanced Landscape Work ($8,000 | +10.5% Value)</option>
-                                </select>
-                                <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyLandscape" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
-                                </div>
-                            </div>
+                            <select id="optLandscape" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="3000,7.5,Basic Landscape Work">Basic Landscape Work ($3,000 | +7.5% Value)</option>
+                                <option value="8000,10.5,Advanced Landscape Work">Advanced Landscape Work ($8,000 | +10.5% Value)</option>
+                            </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🪵 Flooring</label>
-                            <div class="flex gap-2">
-                                <select id="optFlooring" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
-                                    <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
-                                    <option value="5000,15,Flooring Replacement">Replace with LVP Flooring ($5,000 | +15% Value)</option>
-                                </select>
-                                <div class="w-24 shrink-0">
-                                    <input type="number" id="qtyFlooring" value="1" min="1" class="w-full p-2 border border-gray-300 rounded-md text-sm text-center" placeholder="Qty" oninput="calculateAll()">
-                                </div>
-                            </div>
+                            <select id="optFlooring" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
+                                <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                                <option value="5000,15,Flooring Replacement">Replace with LVP Flooring ($5,000 | +15% Value)</option>
+                            </select>
                         </div>
 
                         <div>
@@ -424,13 +389,17 @@
     </div>
 
     <script>
-        function getDropdownValues(id, qtyId) {
+        function parseDropdown(id, isAdjustableQty, qtyId) {
             const element = document.getElementById(id);
-            const qtyElement = document.getElementById(qtyId);
             const values = element.value.split(',');
             
-            let qty = parseInt(qtyElement.value) || 1;
-            if (qty < 1) qty = 1;
+            // Default everything to quantity 1 unless it's the adjustable bathroom field
+            let qty = 1;
+            if (isAdjustableQty) {
+                const qtyElement = document.getElementById(qtyId);
+                qty = parseInt(qtyElement.value) || 1;
+                if (qty < 1) qty = 1;
+            }
 
             return {
                 cost: (parseFloat(values[0]) || 0) * qty,
@@ -442,7 +411,6 @@
         }
 
         function calculateAll() {
-            // Core Metric Variable Declarations
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) || 0;
             const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) || 0;
@@ -454,19 +422,21 @@
             let totalValueIncreasePct = 0;
             let printTableHtml = "";
 
+            // Mapping list configurations - Only Bathroom has qty tied to it now
             const configuration = [
-                { select: 'optInteriorPaint', qty: 'qtyInteriorPaint' },
-                { select: 'optExteriorWall', qty: 'qtyExteriorWall' },
-                { select: 'optWindows', qty: 'qtyWindows' },
-                { select: 'optRoof', qty: 'qtyRoof' },
-                { select: 'optKitchen', qty: 'qtyKitchen' },
-                { select: 'optBathroom', qty: 'qtyBathroom' },
-                { select: 'optLandscape', qty: 'qtyLandscape' },
-                { select: 'optFlooring', qty: 'qtyFlooring' }
+                { select: 'optInteriorPaint', adjustable: false },
+                { select: 'optExteriorWall', adjustable: false },
+                { select: 'optWindows', adjustable: false },
+                { select: 'optRoof', adjustable: false },
+                { select: 'optKitchen', adjustable: false },
+                { select: 'optBathroom', adjustable: true, qty: 'qtyBathroom' },
+                { select: 'optLandscape', adjustable: false },
+                { select: 'optFlooring', adjustable: false }
             ];
 
             configuration.forEach(item => {
-                const data = getDropdownValues(item.select, item.qty);
+                const data = parseDropdown(item.select, item.adjustable, item.qty);
+                // CRITICAL EXCLUSION FILTER: Only write row out if dollar amount > 0
                 if(data.rawBaseCost > 0) {
                     totalRehab += data.cost;
                     totalValueIncreasePct += data.pct;
