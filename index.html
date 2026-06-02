@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fix & Flip Strategy & Market Analyzer</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         .accordion-content {
             max-height: 0;
@@ -14,34 +15,32 @@
         .accordion-content.open {
             max-height: 1800px;
         }
-        /* High-fidelity layout print engine simulation classes */
-        @media print {
-            body {
-                background-color: #ffffff !important;
-                padding: 0 !important;
-                margin: 0 !important;
-                font-size: 10pt !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .print-container {
-                width: 100% !important;
-                max-width: 100% !important;
-                box-shadow: none !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            .page-break-before {
-                page-break-before: always !important;
-                margin-top: 20mm !important;
-            }
-            table {
-                page-break-inside: avoid !important;
-            }
-            tr {
-                page-break-inside: avoid !important;
-            }
+        
+        /* Styles used specifically when generating the download file */
+        .pdf-mode {
+            background-color: #ffffff !important;
+            padding: 10mm !important;
+            font-size: 10pt !important;
+        }
+        .pdf-mode .no-print {
+            display: none !important;
+        }
+        .pdf-mode .print-container {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .pdf-mode .pdf-header {
+            display: block !important;
+        }
+        .pdf-mode .pdf-table-block {
+            display: block !important;
+        }
+        .pdf-mode .page-break {
+            page-break-before: always !important;
+            margin-top: 15mm !important;
         }
     </style>
 </head>
@@ -54,12 +53,12 @@
                 <h1 class="text-3xl font-black text-slate-900 tracking-tight">House Flipping Investing Calculator</h1>
                 <p class="text-gray-500 mt-1">Dynamic upgrade decision matrix & value addition simulator with volume multipliers.</p>
             </div>
-            <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow transition duration-200 cursor-pointer text-sm flex items-center gap-2">
-                📄 Print / Export Premium PDF Report
+            <button onclick="downloadPDFReport()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-5 rounded-lg shadow transition duration-200 cursor-pointer text-sm flex items-center gap-2">
+                📄 Export & Download PDF Report
             </button>
         </div>
 
-        <div class="hidden print:block bg-slate-900 text-white p-6 rounded-t-xl mb-6 -mt-4 -mx-4 md:-mt-8 md:-mx-8">
+        <div class="pdf-header hidden bg-slate-900 text-white p-6 rounded-t-xl mb-6">
             <h1 class="text-2xl font-bold tracking-tight uppercase">Real Estate Deal Underwriting Report</h1>
             <p class="text-slate-400 text-xs mt-1">Apex Property Group | Student Investor Portfolio Strategy Audit Log</p>
         </div>
@@ -67,36 +66,36 @@
         <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 shadow-sm">
             <div>
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Student Analyst Name(s)</label>
-                <input type="text" id="studentName" value="John Doe & Jane Smith" class="w-full mt-1 p-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 font-medium text-sm print:border-none print:p-0 print:bg-transparent print:text-base print:font-bold print:text-slate-900" placeholder="Enter student name(s)..." oninput="calculateAll()">
+                <input type="text" id="studentName" value="John Doe & Jane Smith" class="w-full mt-1 p-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 font-medium text-sm" placeholder="Enter student name(s)..." oninput="calculateAll()">
             </div>
             <div>
                 <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Target Property Address</label>
-                <input type="text" id="propertyAddress" value="123 Investment Way, Suite A" class="w-full mt-1 p-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 font-medium text-sm print:border-none print:p-0 print:bg-transparent print:text-base print:font-bold print:text-slate-900" placeholder="Street Address, City, State, ZIP..." oninput="calculateAll()">
+                <input type="text" id="propertyAddress" value="123 Investment Way, Suite A" class="w-full mt-1 p-2 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 font-medium text-sm" placeholder="Street Address, City, State, ZIP..." oninput="calculateAll()">
             </div>
         </div>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             
-            <div class="lg:col-span-2 space-y-6 print:space-y-8">
+            <div class="lg:col-span-2 space-y-6">
                 
-                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm print:border-none print:shadow-none">
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <div class="no-print bg-slate-50 p-4 font-bold text-slate-800 flex justify-between items-center border-b border-gray-200">
                         <span class="flex items-center gap-2">🏠 1. Property Acquisition Costs</span>
                     </div>
-                    <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 print:p-0 print:grid-cols-2">
+                    <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider print:text-slate-600">Purchase Price ($)</label>
-                            <input type="number" id="purchasePrice" value="200000" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm print:border-none print:p-0 print:text-base print:font-mono print:font-bold print:text-slate-900" oninput="calculateAll()">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Purchase Price ($)</label>
+                            <input type="number" id="purchasePrice" value="200000" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider print:text-slate-600">Buying Closing Costs (%)</label>
-                            <input type="number" id="closingCostPct" value="2.5" step="0.1" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm print:border-none print:p-0 print:text-base print:font-mono print:font-bold print:text-slate-900" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1 print:text-slate-500">Calculated Cash Outlay: <span id="lblCalculatedClosing" class="font-semibold text-gray-600 print:font-mono print:text-slate-900">$0</span></p>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Buying Closing Costs (%)</label>
+                            <input type="number" id="closingCostPct" value="2.5" step="0.1" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
+                            <p class="text-xs text-gray-400 mt-1">Calculated Cash Outlay: <span id="lblCalculatedClosing" class="font-semibold text-gray-600">$0</span></p>
                         </div>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm print:border-none print:shadow-none">
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <div class="no-print bg-slate-50 p-4 font-bold text-slate-800 flex justify-between items-center border-b border-gray-200">
                         <span class="flex items-center gap-2">🔨 2. Rehab Strategy Options (Select Upgrades & Quantities)</span>
                     </div>
@@ -237,7 +236,7 @@
 
                     </div>
 
-                    <div class="hidden print:block mt-2">
+                    <div class="pdf-table-block hidden mt-2">
                         <div class="bg-slate-800 text-white font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-t">
                             2. Itemized Renovation Audit Log
                         </div>
@@ -255,135 +254,136 @@
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm print:border-none print:shadow-none">
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <div class="no-print bg-slate-50 p-4 font-bold text-slate-800 flex justify-between items-center border-b border-gray-200">
                         <span class="flex items-center gap-2">💰 3. Project Financing & Timeline Estimates</span>
                     </div>
-                    <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 print:p-0 print:grid-cols-2">
+                    <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider print:text-slate-600">Down Payment Requirements (%)</label>
-                            <input type="number" id="downPaymentPct" value="20" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm print:border-none print:p-0 print:text-base print:font-mono print:font-bold print:text-slate-900" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1 print:text-slate-500">Calculated Down Payment: <span id="lblCalculatedDown" class="font-semibold text-gray-600 print:font-mono print:text-slate-900">$0</span></p>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Down Payment Requirements (%)</label>
+                            <input type="number" id="downPaymentPct" value="20" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
+                            <p class="text-xs text-gray-400 mt-1">Calculated Down Payment: <span id="lblCalculatedDown" class="font-semibold text-gray-600">$0</span></p>
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider print:text-slate-600">Projected Project Timeline (Months)</label>
-                            <input type="number" id="timeline" value="6" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm print:border-none print:p-0 print:text-base print:font-mono print:font-bold print:text-slate-900" oninput="calculateAll()">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Projected Project Timeline (Months)</label>
+                            <input type="number" id="timeline" value="6" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
                         </div>
-                        <div class="md:col-span-2 print:col-span-2">
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider print:text-slate-600">Monthly Carrying Costs ($/mo)</label>
-                            <input type="number" id="holdingCosts" value="1500" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm print:border-none print:p-0 print:text-base print:font-mono print:font-bold print:text-slate-900" oninput="calculateAll()">
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Monthly Carrying Costs ($/mo)</label>
+                            <input type="number" id="holdingCosts" value="1500" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
                         </div>
                     </div>
                 </div>
 
-                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm print:border-none print:shadow-none">
+                <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
                     <div class="no-print bg-slate-50 p-4 font-bold text-slate-800 flex justify-between items-center border-b border-gray-200">
                         <span class="flex items-center gap-2">🚪 4. Exit Strategy & Realtor Charges</span>
                     </div>
-                    <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4 print:p-0 print:grid-cols-2">
+                    <div class="p-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider print:text-slate-600">Calculated Resale Price (ARV) ($)</label>
-                            <input type="text" id="lblCalculatedARV" readonly class="w-full mt-1 p-2 border bg-gray-100 rounded-md font-bold text-slate-800 text-sm print:border-none print:p-0 print:bg-transparent print:text-base print:font-mono print:text-slate-900">
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Calculated Resale Price (ARV) ($)</label>
+                            <input type="text" id="lblCalculatedARV" readonly class="w-full mt-1 p-2 border bg-gray-100 rounded-md font-bold text-slate-800 text-sm">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider print:text-slate-600">Realtor / Selling Fees (%)</label>
-                            <input type="number" id="realtorFeePct" value="5.0" step="0.1" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm print:border-none print:p-0 print:text-base print:font-mono print:font-bold print:text-slate-900" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1 print:text-slate-500">Calculated Commissions: <span id="lblCalculatedSelling" class="font-semibold text-gray-600 print:font-mono print:text-slate-900">$0</span></p>
+                            <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider">Realtor / Selling Fees (%)</label>
+                            <input type="number" id="realtorFeePct" value="5.0" step="0.1" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 text-sm" oninput="calculateAll()">
+                            <p class="text-xs text-gray-400 mt-1">Calculated Commissions: <span id="lblCalculatedSelling" class="font-semibold text-gray-600">$0</span></p>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <div id="printTargetDashboardCard" class="bg-slate-900 text-white rounded-xl p-5 md:p-6 flex flex-col justify-between border border-slate-800 shadow-xl h-fit lg:sticky lg:top-6 print:bg-white print:text-slate-800 print:border-none print:shadow-none print:p-0 print:mt-4">
+            <div id="printTargetDashboardCard" class="bg-slate-900 text-white rounded-xl p-5 md:p-6 flex flex-col justify-between border border-slate-800 shadow-xl h-fit lg:sticky lg:top-6">
                 <div>
-                    <h2 class="text-sm font-bold text-blue-400 tracking-wider uppercase mb-3 print:bg-slate-800 print:text-white print:px-3 print:py-1.5 print:rounded-t print:text-xs">
+                    <h2 class="text-sm font-bold text-blue-400 tracking-wider uppercase mb-3 text-xs">
                         1. Financial Underwriting Dashboard
                     </h2>
                     
-                    <div class="overflow-hidden rounded-lg border border-slate-800 bg-slate-950/40 p-4 print:border print:border-gray-200 print:bg-white print:p-0">
+                    <div class="overflow-hidden rounded-lg border border-slate-800 bg-slate-950/40 p-4">
                         <table class="w-full text-xs text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-slate-800 font-bold text-slate-400 print:border-b print:border-gray-300 print:bg-slate-50 print:text-slate-700">
+                                <tr class="border-b border-slate-800 font-bold text-slate-400">
                                     <th class="pb-2 p-2 w-[45%]">Financial Matrix Metric</th>
                                     <th class="pb-2 p-2 w-[20%] text-right font-mono">Value</th>
-                                    <th class="pb-2 p-2 w-[35%] text-left pl-4 hidden md:table-cell print:table-cell text-[10px] font-normal italic text-slate-500">What this includes</th>
+                                    <th class="pb-2 p-2 w-[35%] text-left pl-4 hidden md:table-cell text-[10px] font-normal italic text-slate-500">What this includes</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-850 print:divide-y print:divide-gray-200 font-medium text-slate-300 print:text-slate-700">
-                                <tr class="border-b border-slate-850/50 print:border-b">
-                                    <td class="p-2 font-bold text-white print:text-slate-900">Estimated Resale Price (ARV)</td>
-                                    <td class="p-2 text-right font-mono font-bold text-emerald-400 print:text-emerald-600" id="lblDashARV">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Target sales price based on value-adds.</td>
+                            <tbody class="divide-y divide-slate-850 font-medium text-slate-300">
+                                <tr class="border-b border-slate-850/50">
+                                    <td class="p-2 font-bold text-white">Estimated Resale Price (ARV)</td>
+                                    <td class="p-2 text-right font-mono font-bold text-emerald-400" id="lblDashARV">$0</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Target sales price based on value-adds.</td>
                                 </tr>
-                                <tr class="border-b border-slate-850/50 print:border-b">
+                                <tr class="border-b border-slate-850/50">
                                     <td class="p-2">Market Purchase Price Baseline</td>
-                                    <td class="p-2 text-right font-mono text-white print:text-slate-900" id="lblSummaryPurchase">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Initial baseline cash acquisition price.</td>
+                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryPurchase">$0</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Initial baseline cash acquisition price.</td>
                                 </tr>
-                                <tr class="border-b border-slate-850/50 print:border-b">
+                                <tr class="border-b border-slate-850/50">
                                     <td class="p-2">Strategic Value Addition Yield</td>
-                                    <td class="p-2 text-right font-mono font-bold text-yellow-400 print:text-amber-600" id="lblDashPct">+0%</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Calculated premium scaling multiplier.</td>
+                                    <td class="p-2 text-right font-mono font-bold text-yellow-400" id="lblDashPct">+0%</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Calculated premium scaling multiplier.</td>
                                 </tr>
-                                <tr class="border-b border-slate-850/50 print:border-b">
+                                <tr class="border-b border-slate-850/50">
                                     <td class="p-2">Down Payment Equity Capital</td>
-                                    <td class="p-2 text-right font-mono text-white print:text-slate-900" id="lblSummaryDown">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Cash down requirement allocation.</td>
+                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryDown">$0</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Cash down requirement allocation.</td>
                                 </tr>
-                                <tr class="border-b border-slate-850/50 print:border-b">
+                                <tr class="border-b border-slate-850/50">
                                     <td class="p-2">Upfront Buying Closing Costs</td>
-                                    <td class="p-2 text-right font-mono text-white print:text-slate-900" id="lblSummaryClosing">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Escrow transfer, title, and settlement fees.</td>
+                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryClosing">$0</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Escrow transfer, title, and settlement fees.</td>
                                 </tr>
-                                <tr class="border-b border-slate-850/50 print:border-b">
+                                <tr class="border-b border-slate-850/50">
                                     <td class="p-2">Total Construction Expenses</td>
-                                    <td class="p-2 text-right font-mono text-white print:text-slate-900" id="lblSummaryRehab">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Hard budget totals required for upgrades.</td>
+                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryRehab">$0</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Hard budget totals required for upgrades.</td>
                                 </tr>
-                                <tr class="border-b border-slate-850/50 print:border-b">
+                                <tr class="border-b border-slate-850/50">
                                     <td class="p-2">Holding Carrying Overhead</td>
-                                    <td class="p-2 text-right font-mono text-white print:text-slate-900" id="lblTotalHolding">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Interest, utility bills, taxes over <span id="lblMonths">6</span> months.</td>
+                                    <td class="p-2 text-right font-mono text-white" id="lblTotalHolding">$0</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Interest, utility bills, taxes over <span id="lblMonths">6</span> months.</td>
                                 </tr>
-                                <tr class="border-b border-slate-800/50 print:border-b">
+                                <tr class="border-b border-slate-800/50">
                                     <td class="p-2">Broker Disposition Realtor Commissions</td>
-                                    <td class="p-2 text-right font-mono text-white print:text-slate-900" id="lblSummarySelling">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 print:text-slate-500 hidden md:table-cell print:table-cell">Contracted real estate agent sell costs.</td>
+                                    <td class="p-2 text-right font-mono text-white" id="lblSummarySelling">$0</td>
+                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Contracted real estate agent sell costs.</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
 
-                    <div class="mt-4 grid grid-cols-1 gap-3 bg-slate-950 rounded-lg p-3 border border-slate-800 print:bg-slate-50 print:border print:border-gray-200">
+                    <div class="mt-4 grid grid-cols-1 gap-3 bg-slate-950 rounded-lg p-3 border border-slate-800">
                         <div class="flex justify-between items-center py-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider print:text-slate-600">Total Capital Investment Required</span>
-                            <span class="font-mono text-sm font-bold text-white print:text-slate-900" id="lblTotalEquity">$0</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Capital Investment Required</span>
+                            <span class="font-mono text-sm font-bold text-white" id="lblTotalEquity">$0</span>
                         </div>
-                        <div class="flex justify-between items-center border-t border-slate-850 pt-2 print:border-gray-200 py-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider print:text-slate-600">Net Operational Cash Profit</span>
+                        <div class="flex justify-between items-center border-t border-slate-850 pt-2 py-1">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Net Operational Cash Profit</span>
                             <span class="font-mono text-base font-black text-emerald-400" id="lblNetProfit">$0</span>
                         </div>
-                        <div class="flex justify-between items-center border-t border-slate-850 pt-2 print:border-gray-200 py-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider print:text-slate-600">Cash-on-Cash Return Yield</span>
+                        <div class="flex justify-between items-center border-t border-slate-850 pt-2 py-1">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cash-on-Cash Return Yield</span>
                             <span class="font-mono text-sm font-bold text-emerald-400" id="lblROI">0%</span>
                         </div>
                     </div>
                     
                     <div class="mt-3 p-2 rounded text-[10px] font-bold text-center border" id="printDashboardRuleBox"></div>
+                    <div class="no-print mt-3 text-center" id="ruleBox"></div>
                 </div>
             </div>
         </div>
 
-        <div class="page-break-before mt-8 border-t border-gray-200 pt-6 print:border-t-2 print:border-gray-300">
-            <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2 print:bg-slate-800 print:text-white print:px-3 print:py-1.5 print:rounded-t print:text-xs">
+        <div class="page-break mt-8 border-t border-gray-200 pt-6">
+            <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
                 3. Time Delay Risk Assessment (Timeline Sensitivity Matrix)
             </h3>
-            <p class="text-xs text-gray-500 mb-4 print:text-slate-600 print:mt-1">
+            <p class="text-xs text-gray-500 mb-4">
                 Models how sudden construction timeline delays bleed cash reserves through constant monthly carrying overhead leakages.
             </p>
             
-            <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm print:border print:border-gray-200 print:shadow-none">
+            <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
                 <table class="w-full text-xs text-left border-collapse">
                     <thead>
                         <tr class="bg-slate-50 border-b border-gray-200 font-bold text-slate-700 uppercase tracking-wider">
@@ -427,7 +427,7 @@
                 </table>
             </div>
 
-            <div class="mt-6 p-4 bg-rose-50/40 border border-rose-200 rounded-lg text-rose-800 text-[10px] leading-relaxed print:mt-6 print:page-break-inside-avoid">
+            <div class="mt-6 p-4 bg-rose-50/40 border border-rose-200 rounded-lg text-rose-800 text-[10px] leading-relaxed">
                 <span class="font-bold uppercase tracking-wider block mb-1">Underwriting Portfolio Compliance Attestation Note:</span>
                 This model provides estimations based entirely on user inputs. Local market micro-climates, unexpected delays with city permits, material supply costs, and changing economic interest rates can heavily modify investment returns. Final purchase approval demands certified appraisals and field asset tracking inspections.
             </div>
@@ -436,14 +436,6 @@
     </div>
 
     <script>
-        function toggleAccordion(id) {
-            const block = document.getElementById(id);
-            const icon = document.getElementById(`icon-${id}`);
-            if(!block || !icon) return;
-            block.classList.toggle('open');
-            icon.style.transform = block.classList.contains('open') ? "rotate(180deg)" : "rotate(0deg)";
-        }
-
         function getDropdownValues(id, qtyId) {
             const element = document.getElementById(id);
             const qtyElement = document.getElementById(qtyId);
@@ -472,8 +464,6 @@
 
             let totalRehab = 0;
             let totalValueIncreasePct = 0;
-            
-            // Programmatically track items to print cleanly into fluid tables
             let printTableHtml = "";
 
             const configuration = [
@@ -492,7 +482,7 @@
                 if(data.rawBaseCost > 0) {
                     totalRehab += data.cost;
                     totalValueIncreasePct += data.pct;
-                    printTableHtml += `<tr class="border-b text-slate-700">
+                    printTableHtml += `<tr class="border-b text-slate-700 text-xs">
                         <td class="p-2 border-r border-gray-200">${data.name}</td>
                         <td class="p-2 border-r border-gray-200 text-center font-mono">${data.unitQty} Unit(s)</td>
                         <td class="p-2 text-right font-mono font-bold">$${data.cost.toLocaleString()}</td>
@@ -500,7 +490,6 @@
                 }
             });
 
-            // Flat checklist hazards array mapping
             const hazards = [
                 { id: 'chkSeptic', cost: 20000, pct: 12, name: 'Septic System Replacement' },
                 { id: 'chkFoundation', cost: 18000, pct: 12, name: 'Foundation Structural Repair' },
@@ -512,7 +501,7 @@
                 if(document.getElementById(h.id).checked) {
                     totalRehab += h.cost;
                     totalValueIncreasePct += h.pct;
-                    printTableHtml += `<tr class="border-b text-slate-700 bg-amber-50/20">
+                    printTableHtml += `<tr class="border-b text-slate-700 text-xs bg-amber-50/20">
                         <td class="p-2 border-r border-gray-200 font-semibold text-amber-900">⚠️ HAZARD: ${h.name}</td>
                         <td class="p-2 border-r border-gray-200 text-center font-mono">1 Item</td>
                         <td class="p-2 text-right font-mono font-bold text-amber-900">$${h.cost.toLocaleString()}</td>
@@ -520,13 +509,11 @@
                 }
             });
 
-            // Add safe structural fallback row if no renovations are chosen
             if(printTableHtml === "") {
-                printTableHtml = `<tr><td colspan="3" class="p-4 text-center text-gray-400 italic bg-gray-50">No structural modifications or interior cosmetic renovations selected.</td></tr>`;
+                printTableHtml = `<tr><td colspan="3" class="p-4 text-center text-gray-400 italic bg-gray-50 text-xs">No structural modifications or interior cosmetic renovations selected.</td></tr>`;
             }
 
-            // Append a summary total row directly to the layout table body blueprint
-            printTableHtml += `<tr class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-700">
+            printTableHtml += `<tr class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-700 text-xs">
                 <td class="p-2 text-right uppercase tracking-wider" colspan="2">Aggregate Project Construction Budget:</td>
                 <td class="p-2 text-right font-mono text-sm font-black">$${totalRehab.toLocaleString()}</td>
             </tr>`;
@@ -547,13 +534,13 @@
             const netProfit = arv - totalAllInCost;
             const roi = totalOutofPocketEquity > 0 ? (netProfit / totalOutofPocketEquity) * 100 : 0;
 
-            // Updating Interactive Form elements
+            // Updating Form inputs
             document.getElementById('lblCalculatedARV').value = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblCalculatedClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
             document.getElementById('lblCalculatedSelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
 
-            // Syncing Target Dashboard UI components
+            // Syncing UI Dashboard elements
             document.getElementById('lblDashARV').innerText = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblSummaryPurchase').innerText = `$${purchasePrice.toLocaleString()}`;
             document.getElementById('lblDashPct').innerText = `+${totalValueIncreasePct}%`;
@@ -565,14 +552,14 @@
             document.getElementById('lblSummarySelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
             document.getElementById('lblTotalEquity').innerText = `$${totalOutofPocketEquity.toLocaleString()}`;
             
-            // Dynamic Net Profit Coloring Node checks (Changes color layout safely if deal loses money)
+            // Handle active styling parameters across financial profit changes
             const profitNodes = document.querySelectorAll('#lblNetProfit, #lblROI');
             profitNodes.forEach(node => {
                 node.innerText = node.id === 'lblNetProfit' ? `$${Math.round(netProfit).toLocaleString()}` : `${roi.toFixed(1)}%`;
                 if(netProfit >= 0) {
-                    node.className = node.id === 'lblNetProfit' ? "font-mono text-base font-black text-emerald-400 print:text-emerald-600" : "font-mono text-sm font-bold text-emerald-400 print:text-emerald-600";
+                    node.className = node.id === 'lblNetProfit' ? "font-mono text-base font-black text-emerald-400" : "font-mono text-sm font-bold text-emerald-400";
                 } else {
-                    node.className = node.id === 'lblNetProfit' ? "font-mono text-base font-black text-rose-500 print:text-rose-600" : "font-mono text-sm font-bold text-rose-500 print:text-rose-600";
+                    node.className = node.id === 'lblNetProfit' ? "font-mono text-base font-black text-rose-500" : "font-mono text-sm font-bold text-rose-500";
                 }
             });
 
@@ -583,10 +570,10 @@
             
             [targetRuleBox, printRuleBox].forEach(box => {
                 if (purchasePrice <= maxAllowableOffer) {
-                    box.className = "mt-4 p-2.5 rounded text-xs text-center font-bold bg-emerald-950 text-emerald-400 border border-emerald-800 print:bg-emerald-50 print:text-emerald-700 print:border-emerald-300";
+                    box.className = "p-2.5 rounded text-xs text-center font-bold bg-emerald-950 text-emerald-400 border border-emerald-800";
                     box.innerText = `✅ Passes 70% Rule (Max Offer Cushion: $${Math.round(maxAllowableOffer).toLocaleString()})`;
                 } else {
-                    box.className = "mt-4 p-2.5 rounded text-xs text-center font-bold bg-rose-950 text-rose-400 border border-rose-900 print:bg-rose-50 print:text-rose-700 print:border-rose-300";
+                    box.className = "p-2.5 rounded text-xs text-center font-bold bg-rose-950 text-rose-400 border border-rose-900";
                     box.innerText = `⚠️ Exceeds 70% Rule (Max Offer Cushion: $${Math.round(maxAllowableOffer).toLocaleString()})`;
                 }
             });
@@ -620,7 +607,32 @@
             });
         }
 
-        // Initialize active configurations on initial page execution
+        // ASYNC HIGH-FIDELITY PDF EXPORT GENERATOR WITH AUTOMATIC FILE DOWNLOAD
+        function downloadPDFReport() {
+            const targetElement = document.getElementById('masterAppCard');
+            
+            // Step 1: Temporarily wrap app layout container inside background pdf tracking modes
+            targetElement.classList.add('pdf-mode');
+
+            // Step 2: Establish specific layout render parameters for html2pdf
+            const pdfConfigurations = {
+                margin:       [10, 10, 10, 10], // Margins: Top, Left, Bottom, Right (in mm)
+                filename:     'Flip-Investment-Analysis-Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            // Step 3: Initialize conversion engine tracking promise, then clear temporary classes
+            html2pdf().set(pdfConfigurations).from(targetElement).save().then(() => {
+                targetElement.classList.remove('pdf-mode');
+            }).catch(err => {
+                console.error("PDF Export failed:", err);
+                targetElement.classList.remove('pdf-mode');
+            });
+        }
+
+        // Initialize calculations on layout mount initialization
         window.onload = function() {
             calculateAll();
         };
