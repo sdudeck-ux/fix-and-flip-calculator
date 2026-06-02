@@ -145,6 +145,15 @@
                         </select>
                     </div>
                     <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Flooring Strategy</label>
+                        <select id="optFlooring" class="w-full p-2 border border-gray-300 rounded bg-white text-sm" onchange="calculateAll()">
+                            <option value="0,0,No Work Done">No Work Done ($0 | +0%)</option>
+                            <option value="5000,15,Flooring Rehab (Low Cost)">Flooring Rehab - Low Cost ($5,000 | +15% Value)</option>
+                            <option value="11000,16.5,Flooring Rehab (Mid Line)">Flooring Rehab - Mid Line ($11,000 | +16.5% Value)</option>
+                            <option value="18000,18,Flooring Rehab (High End)">Flooring Rehab - High End ($18,000 | +18% Value)</option>
+                        </select>
+                    </div>
+                    <div>
                         <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Bathroom Rehab (With Multiplier)</label>
                         <div class="flex gap-2">
                             <select id="optBathroom" class="w-full p-2 border border-gray-300 rounded bg-white text-sm" onchange="calculateAll()">
@@ -348,13 +357,14 @@
             let totalValueIncreasePct = 0;
             let printTableHtml = "";
 
-            // Standard upgrades layout map
+            // Standard upgrades layout map (Restored optFlooring here)
             const upgradesConfig = [
                 { select: 'optInteriorPaint', adjustable: false },
                 { select: 'optExteriorWall', adjustable: false },
                 { select: 'optWindows', adjustable: false },
                 { select: 'optRoof', adjustable: false },
                 { select: 'optKitchen', adjustable: false },
+                { select: 'optFlooring', adjustable: false },
                 { select: 'optBathroom', adjustable: true, qty: 'qtyBathroom' }
             ];
 
