@@ -19,18 +19,11 @@
         /* Styles used specifically when generating the download file */
         .pdf-mode {
             background-color: #ffffff !important;
-            padding: 10mm !important;
+            padding: 8mm !important;
             font-size: 10pt !important;
         }
         .pdf-mode .no-print {
             display: none !important;
-        }
-        .pdf-mode .print-container {
-            width: 100% !important;
-            max-width: 100% !important;
-            box-shadow: none !important;
-            padding: 0 !important;
-            margin: 0 !important;
         }
         .pdf-mode .pdf-header {
             display: block !important;
@@ -40,13 +33,13 @@
         }
         .pdf-mode .page-break {
             page-break-before: always !important;
-            margin-top: 15mm !important;
+            margin-top: 12mm !important;
         }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans p-4 md:p-8">
 
-    <div id="masterAppCard" class="print-container max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
+    <div id="pdfPrintArea" class="max-w-6xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8">
         
         <div class="no-print border-b pb-4 mb-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
@@ -59,7 +52,7 @@
         </div>
 
         <div class="pdf-header hidden bg-slate-900 text-white p-6 rounded-t-xl mb-6">
-            <h1 class="text-2xl font-bold tracking-tight uppercase">Real Estate Deal Underwriting Report</h1>
+            <h1 class="text-2xl font-bold tracking-tight uppercase text-white">Real Estate Deal Underwriting Report</h1>
             <p class="text-slate-400 text-xs mt-1">Apex Property Group | Student Investor Portfolio Strategy Audit Log</p>
         </div>
 
@@ -317,325 +310,4 @@
                                 </tr>
                                 <tr class="border-b border-slate-850/50">
                                     <td class="p-2">Market Purchase Price Baseline</td>
-                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryPurchase">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Initial baseline cash acquisition price.</td>
-                                </tr>
-                                <tr class="border-b border-slate-850/50">
-                                    <td class="p-2">Strategic Value Addition Yield</td>
-                                    <td class="p-2 text-right font-mono font-bold text-yellow-400" id="lblDashPct">+0%</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Calculated premium scaling multiplier.</td>
-                                </tr>
-                                <tr class="border-b border-slate-850/50">
-                                    <td class="p-2">Down Payment Equity Capital</td>
-                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryDown">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Cash down requirement allocation.</td>
-                                </tr>
-                                <tr class="border-b border-slate-850/50">
-                                    <td class="p-2">Upfront Buying Closing Costs</td>
-                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryClosing">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Escrow transfer, title, and settlement fees.</td>
-                                </tr>
-                                <tr class="border-b border-slate-850/50">
-                                    <td class="p-2">Total Construction Expenses</td>
-                                    <td class="p-2 text-right font-mono text-white" id="lblSummaryRehab">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Hard budget totals required for upgrades.</td>
-                                </tr>
-                                <tr class="border-b border-slate-850/50">
-                                    <td class="p-2">Holding Carrying Overhead</td>
-                                    <td class="p-2 text-right font-mono text-white" id="lblTotalHolding">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Interest, utility bills, taxes over <span id="lblMonths">6</span> months.</td>
-                                </tr>
-                                <tr class="border-b border-slate-800/50">
-                                    <td class="p-2">Broker Disposition Realtor Commissions</td>
-                                    <td class="p-2 text-right font-mono text-white" id="lblSummarySelling">$0</td>
-                                    <td class="p-2 pl-4 text-[10px] text-slate-400 hidden md:table-cell">Contracted real estate agent sell costs.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-4 grid grid-cols-1 gap-3 bg-slate-950 rounded-lg p-3 border border-slate-800">
-                        <div class="flex justify-between items-center py-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Capital Investment Required</span>
-                            <span class="font-mono text-sm font-bold text-white" id="lblTotalEquity">$0</span>
-                        </div>
-                        <div class="flex justify-between items-center border-t border-slate-850 pt-2 py-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Net Operational Cash Profit</span>
-                            <span class="font-mono text-base font-black text-emerald-400" id="lblNetProfit">$0</span>
-                        </div>
-                        <div class="flex justify-between items-center border-t border-slate-850 pt-2 py-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Cash-on-Cash Return Yield</span>
-                            <span class="font-mono text-sm font-bold text-emerald-400" id="lblROI">0%</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-3 p-2 rounded text-[10px] font-bold text-center border" id="printDashboardRuleBox"></div>
-                    <div class="no-print mt-3 text-center" id="ruleBox"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="page-break mt-8 border-t border-gray-200 pt-6">
-            <h3 class="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
-                3. Time Delay Risk Assessment (Timeline Sensitivity Matrix)
-            </h3>
-            <p class="text-xs text-gray-500 mb-4">
-                Models how sudden construction timeline delays bleed cash reserves through constant monthly carrying overhead leakages.
-            </p>
-            
-            <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm">
-                <table class="w-full text-xs text-left border-collapse">
-                    <thead>
-                        <tr class="bg-slate-50 border-b border-gray-200 font-bold text-slate-700 uppercase tracking-wider">
-                            <th class="px-4 py-2.5 w-[30%]">Renovation Timeline Scenario</th>
-                            <th class="px-4 py-2.5 w-[15%] text-center">Project Length</th>
-                            <th class="px-4 py-2.5 w-[20%] text-right">Extra Holding Expense</th>
-                            <th class="px-4 py-2.5 w-[20%] text-right">Adjusted Net Profit</th>
-                            <th class="px-4 py-2.5 w-[15%] text-right">Adjusted Return (ROI)</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white font-medium text-slate-700">
-                        <tr class="bg-white">
-                            <td class="px-4 py-3 font-bold text-blue-600">On Schedule Target Base</td>
-                            <td class="px-4 py-3 text-center font-mono"><span id="t0_months">6</span> Months</td>
-                            <td class="px-4 py-3 text-right font-mono text-gray-400">$0</td>
-                            <td class="px-4 py-3 text-right font-mono font-bold text-emerald-600" id="t0_profit">$0</td>
-                            <td class="px-4 py-3 text-right font-mono text-emerald-600" id="t0_roi">0%</td>
-                        </tr>
-                        <tr class="bg-slate-50/40">
-                            <td class="px-4 py-3 text-amber-700 font-semibold">Minor Project Delay (+2 Months)</td>
-                            <td class="px-4 py-3 text-center font-mono"><span id="t2_months">8</span> Months</td>
-                            <td class="px-4 py-3 text-right font-mono text-amber-600 font-semibold" id="t2_added">$0</td>
-                            <td class="px-4 py-3 text-right font-mono font-bold" id="t2_profit">$0</td>
-                            <td class="px-4 py-3 text-right font-mono font-bold" id="t2_roi">0%</td>
-                        </tr>
-                        <tr class="bg-white">
-                            <td class="px-4 py-3 text-amber-800 font-semibold">Moderate Project Delay (+4 Months)</td>
-                            <td class="px-4 py-3 text-center font-mono"><span id="t4_months">10</span> Months</td>
-                            <td class="px-4 py-3 text-right font-mono text-amber-700 font-semibold" id="t4_added">$0</td>
-                            <td class="px-4 py-3 text-right font-mono font-bold" id="t4_profit">$0</td>
-                            <td class="px-4 py-3 text-right font-mono font-bold" id="t4_roi">0%</td>
-                        </tr>
-                        <tr class="bg-rose-50/20">
-                            <td class="px-4 py-3 text-rose-700 font-bold">Severe Project Delay (+6 Months)</td>
-                            <td class="px-4 py-3 text-center font-mono"><span id="t6_months">12</span> Months</td>
-                            <td class="px-4 py-3 text-right font-mono text-rose-600 font-bold" id="t6_added">$0</td>
-                            <td class="px-4 py-3 text-right font-mono font-bold" id="t6_profit">$0</td>
-                            <td class="px-4 py-3 text-right font-mono font-bold" id="t6_roi">0%</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="mt-6 p-4 bg-rose-50/40 border border-rose-200 rounded-lg text-rose-800 text-[10px] leading-relaxed">
-                <span class="font-bold uppercase tracking-wider block mb-1">Underwriting Portfolio Compliance Attestation Note:</span>
-                This model provides estimations based entirely on user inputs. Local market micro-climates, unexpected delays with city permits, material supply costs, and changing economic interest rates can heavily modify investment returns. Final purchase approval demands certified appraisals and field asset tracking inspections.
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        function getDropdownValues(id, qtyId) {
-            const element = document.getElementById(id);
-            const qtyElement = document.getElementById(qtyId);
-            const values = element.value.split(',');
-            
-            let qty = parseInt(qtyElement.value) || 1;
-            if (qty < 1) qty = 1;
-
-            return {
-                cost: (parseFloat(values[0]) || 0) * qty,
-                pct: (parseFloat(values[1]) || 0) * qty,
-                name: values[2] || "",
-                unitQty: qty,
-                rawBaseCost: parseFloat(values[0]) || 0
-            };
-        }
-
-        function calculateAll() {
-            // Basic Financial Baseline Variable Extractions
-            const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
-            const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) || 0;
-            const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) || 0;
-            const timeline = parseFloat(document.getElementById('timeline').value) || 0;
-            const holdingCostsPerMonth = parseFloat(document.getElementById('holdingCosts').value) || 0;
-            const realtorFeePct = parseFloat(document.getElementById('realtorFeePct').value) || 0;
-
-            let totalRehab = 0;
-            let totalValueIncreasePct = 0;
-            let printTableHtml = "";
-
-            const configuration = [
-                { select: 'optInteriorPaint', qty: 'qtyInteriorPaint' },
-                { select: 'optExteriorWall', qty: 'qtyExteriorWall' },
-                { select: 'optWindows', qty: 'qtyWindows' },
-                { select: 'optRoof', qty: 'qtyRoof' },
-                { select: 'optKitchen', qty: 'qtyKitchen' },
-                { select: 'optBathroom', qty: 'qtyBathroom' },
-                { select: 'optLandscape', qty: 'qtyLandscape' },
-                { select: 'optFlooring', qty: 'qtyFlooring' }
-            ];
-
-            configuration.forEach(item => {
-                const data = getDropdownValues(item.select, item.qty);
-                if(data.rawBaseCost > 0) {
-                    totalRehab += data.cost;
-                    totalValueIncreasePct += data.pct;
-                    printTableHtml += `<tr class="border-b text-slate-700 text-xs">
-                        <td class="p-2 border-r border-gray-200">${data.name}</td>
-                        <td class="p-2 border-r border-gray-200 text-center font-mono">${data.unitQty} Unit(s)</td>
-                        <td class="p-2 text-right font-mono font-bold">$${data.cost.toLocaleString()}</td>
-                    </tr>`;
-                }
-            });
-
-            const hazards = [
-                { id: 'chkSeptic', cost: 20000, pct: 12, name: 'Septic System Replacement' },
-                { id: 'chkFoundation', cost: 18000, pct: 12, name: 'Foundation Structural Repair' },
-                { id: 'chkHeating', cost: 7000, pct: 12, name: 'New Heating System' },
-                { id: 'chkElectrical', cost: 6000, pct: 6, name: 'Complete Electrical Work' }
-            ];
-
-            hazards.forEach(h => {
-                if(document.getElementById(h.id).checked) {
-                    totalRehab += h.cost;
-                    totalValueIncreasePct += h.pct;
-                    printTableHtml += `<tr class="border-b text-slate-700 text-xs bg-amber-50/20">
-                        <td class="p-2 border-r border-gray-200 font-semibold text-amber-900">⚠️ HAZARD: ${h.name}</td>
-                        <td class="p-2 border-r border-gray-200 text-center font-mono">1 Item</td>
-                        <td class="p-2 text-right font-mono font-bold text-amber-900">$${h.cost.toLocaleString()}</td>
-                    </tr>`;
-                }
-            });
-
-            if(printTableHtml === "") {
-                printTableHtml = `<tr><td colspan="3" class="p-4 text-center text-gray-400 italic bg-gray-50 text-xs">No structural modifications or interior cosmetic renovations selected.</td></tr>`;
-            }
-
-            printTableHtml += `<tr class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-700 text-xs">
-                <td class="p-2 text-right uppercase tracking-wider" colspan="2">Aggregate Project Construction Budget:</td>
-                <td class="p-2 text-right font-mono text-sm font-black">$${totalRehab.toLocaleString()}</td>
-            </tr>`;
-
-            document.getElementById('printRehabTableBody').innerHTML = printTableHtml;
-
-            // Compounding After Repair Value Formulations (ARV)
-            const arv = purchasePrice * (1 + (totalValueIncreasePct / 100));
-
-            const downPaymentAmount = purchasePrice * (downPaymentPct / 100);
-            const buyingClosingCosts = purchasePrice * (closingCostPct / 100);
-            const totalHoldingCosts = timeline * holdingCostsPerMonth;
-            const sellingFeesAmount = arv * (realtorFeePct / 100);
-
-            const totalAllInCost = purchasePrice + totalRehab + buyingClosingCosts + totalHoldingCosts + sellingFeesAmount;
-            const totalOutofPocketEquity = downPaymentAmount + buyingClosingCosts + totalRehab + totalHoldingCosts;
-            
-            const netProfit = arv - totalAllInCost;
-            const roi = totalOutofPocketEquity > 0 ? (netProfit / totalOutofPocketEquity) * 100 : 0;
-
-            // Updating Form inputs
-            document.getElementById('lblCalculatedARV').value = `$${Math.round(arv).toLocaleString()}`;
-            document.getElementById('lblCalculatedClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
-            document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
-            document.getElementById('lblCalculatedSelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
-
-            // Syncing UI Dashboard elements
-            document.getElementById('lblDashARV').innerText = `$${Math.round(arv).toLocaleString()}`;
-            document.getElementById('lblSummaryPurchase').innerText = `$${purchasePrice.toLocaleString()}`;
-            document.getElementById('lblDashPct').innerText = `+${totalValueIncreasePct}%`;
-            document.getElementById('lblSummaryDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
-            document.getElementById('lblSummaryClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
-            document.getElementById('lblSummaryRehab').innerText = `$${totalRehab.toLocaleString()}`;
-            document.getElementById('lblMonths').innerText = timeline;
-            document.getElementById('lblTotalHolding').innerText = `$${totalHoldingCosts.toLocaleString()}`;
-            document.getElementById('lblSummarySelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
-            document.getElementById('lblTotalEquity').innerText = `$${totalOutofPocketEquity.toLocaleString()}`;
-            
-            // Handle active styling parameters across financial profit changes
-            const profitNodes = document.querySelectorAll('#lblNetProfit, #lblROI');
-            profitNodes.forEach(node => {
-                node.innerText = node.id === 'lblNetProfit' ? `$${Math.round(netProfit).toLocaleString()}` : `${roi.toFixed(1)}%`;
-                if(netProfit >= 0) {
-                    node.className = node.id === 'lblNetProfit' ? "font-mono text-base font-black text-emerald-400" : "font-mono text-sm font-bold text-emerald-400";
-                } else {
-                    node.className = node.id === 'lblNetProfit' ? "font-mono text-base font-black text-rose-500" : "font-mono text-sm font-bold text-rose-500";
-                }
-            });
-
-            // Underwriting 70% Guideline Safety Status Blocks
-            const maxAllowableOffer = (arv * 0.7) - totalRehab;
-            const targetRuleBox = document.getElementById('ruleBox');
-            const printRuleBox = document.getElementById('printDashboardRuleBox');
-            
-            [targetRuleBox, printRuleBox].forEach(box => {
-                if (purchasePrice <= maxAllowableOffer) {
-                    box.className = "p-2.5 rounded text-xs text-center font-bold bg-emerald-950 text-emerald-400 border border-emerald-800";
-                    box.innerText = `✅ Passes 70% Rule (Max Offer Cushion: $${Math.round(maxAllowableOffer).toLocaleString()})`;
-                } else {
-                    box.className = "p-2.5 rounded text-xs text-center font-bold bg-rose-950 text-rose-400 border border-rose-900";
-                    box.innerText = `⚠️ Exceeds 70% Rule (Max Offer Cushion: $${Math.round(maxAllowableOffer).toLocaleString()})`;
-                }
-            });
-
-            // Syncing Scenario Table Rows logic
-            const delays = [0, 2, 4, 6];
-            delays.forEach(d => {
-                const totalMonths = timeline + d;
-                const addedHold = d * holdingCostsPerMonth;
-                const adjustedAllIn = totalAllInCost + addedHold;
-                const adjustedEquity = totalOutofPocketEquity + addedHold;
-                const adjustedProfit = arv - adjustedAllIn;
-                const adjustedROI = adjustedEquity > 0 ? (adjustedProfit / adjustedEquity) * 100 : 0;
-
-                document.getElementById(`t${d}_months`).innerText = totalMonths;
-                if(d > 0) document.getElementById(`t${d}_added`).innerText = `+$${addedHold.toLocaleString()}`;
-                
-                const pLabel = document.getElementById(`t${d}_profit`);
-                const rLabel = document.getElementById(`t${d}_roi`);
-                
-                pLabel.innerText = `$${Math.round(adjustedProfit).toLocaleString()}`;
-                rLabel.innerText = `${adjustedROI.toFixed(1)}%`;
-                
-                if(adjustedProfit >= 0) {
-                    pLabel.className = "px-4 py-3 text-right font-mono font-bold text-emerald-600";
-                    rLabel.className = "px-4 py-3 text-right font-mono text-emerald-600";
-                } else {
-                    pLabel.className = "px-4 py-3 text-right font-mono font-bold text-rose-600";
-                    rLabel.className = "px-4 py-3 text-right font-mono text-rose-600";
-                }
-            });
-        }
-
-        // ASYNC HIGH-FIDELITY PDF EXPORT GENERATOR WITH AUTOMATIC FILE DOWNLOAD
-        function downloadPDFReport() {
-            const targetElement = document.getElementById('masterAppCard');
-            
-            // Step 1: Temporarily wrap app layout container inside background pdf tracking modes
-            targetElement.classList.add('pdf-mode');
-
-            // Step 2: Establish specific layout render parameters for html2pdf
-            const pdfConfigurations = {
-                margin:       [10, 10, 10, 10], // Margins: Top, Left, Bottom, Right (in mm)
-                filename:     'Flip-Investment-Analysis-Report.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, letterRendering: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            // Step 3: Initialize conversion engine tracking promise, then clear temporary classes
-            html2pdf().set(pdfConfigurations).from(targetElement).save().then(() => {
-                targetElement.classList.remove('pdf-mode');
-            }).catch(err => {
-                console.error("PDF Export failed:", err);
-                targetElement.classList.remove('pdf-mode');
-            });
-        }
-
-        // Initialize calculations on layout mount initialization
-        window.onload = function() {
-            calculateAll();
-        };
-    </script>
-</body>
-</html>
+                                    <td class="p-2 text-right
