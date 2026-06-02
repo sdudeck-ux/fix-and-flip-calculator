@@ -46,7 +46,7 @@
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Buying Closing Costs (%)</label>
                             <input type="number" id="closingCostPct" value="2.5" step="0.1" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1">Calculated: <span id="lblCalculatedClosing" class="font-semibold text-gray-600">$0</span></p>
+                            <p class="text-xs text-gray-400 mt-1">Calculated Outlay: <span id="lblCalculatedClosing" class="font-semibold text-gray-600">$0</span></p>
                         </div>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Down Payment (%)</label>
                             <input type="number" id="downPaymentPct" value="20" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1">Calculated Outlay: <span id="lblCalculatedDown" class="font-semibold text-gray-600">$0</span></p>
+                            <p class="text-xs text-gray-400 mt-1">Calculated Down Payment: <span id="lblCalculatedDown" class="font-semibold text-gray-600">$0</span></p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Projected Timeline (Months)</label>
@@ -225,19 +225,19 @@
                         <div>
                             <label class="block text-xs font-bold text-emerald-600 uppercase">Computed Resale Value (ARV) ($)</label>
                             <input type="text" id="lblCalculatedARV" readonly class="w-full mt-1 p-2 border bg-gray-100 rounded-md font-bold text-slate-800">
-                            <p class="text-xs text-gray-400 mt-1">Automatically scaled up from Purchase Price based on upgrades.</p>
+                            <p class="text-xs text-gray-400 mt-1">Automatically scales from baseline asset acquisition.</p>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-gray-500 uppercase">Realtor / Selling Fees (%)</label>
                             <input type="number" id="realtorFeePct" value="5.0" step="0.1" class="w-full mt-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500" oninput="calculateAll()">
-                            <p class="text-xs text-gray-400 mt-1">Calculated Fees: <span id="lblCalculatedSelling" class="font-semibold text-gray-600">$0</span></p>
+                            <p class="text-xs text-gray-400 mt-1">Broker Commissions: <span id="lblCalculatedSelling" class="font-semibold text-gray-600">$0</span></p>
                         </div>
                     </div>
                 </div>
 
             </div>
 
-            <div class="bg-slate-900 text-white rounded-xl p-6 flex flex-col justify-between border border-slate-800 shadow-xl h-fit sticky top-6">
+            <div class="bg-slate-900 text-white rounded-xl p-6 flex flex-col justify-between border border-slate-800 shadow-xl h-fit lg:sticky lg:top-6">
                 <div>
                     <h2 class="text-lg font-bold text-blue-400 mb-4 tracking-wide uppercase text-xs">Deal Underwriting Dashboard</h2>
                     
@@ -259,7 +259,7 @@
                             <span class="font-mono text-white" id="lblSummaryClosing">$0</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
-                            <span>Total Rehab Budget (Expense):</span>
+                            <span>Total Rehab Budget:</span>
                             <span class="font-mono text-white" id="lblSummaryRehab">$0</span>
                         </div>
                         <div class="flex justify-between border-b border-slate-800 pb-2">
@@ -353,7 +353,6 @@
             const qtyElement = document.getElementById(qtyId);
             const values = element.value.split(',');
             
-            // Fallback safety if students put 0 or negative quantities
             let qty = parseInt(qtyElement.value) || 1;
             if (qty < 1) qty = 1;
 
@@ -366,7 +365,7 @@
         }
 
         function calculateAll() {
-            // Master Financial Inputs
+            // Financial Baseline Variable Extractions
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) || 0;
             const downPaymentPct = parseFloat(document.getElementById('downPaymentPct').value) || 0;
@@ -374,12 +373,11 @@
             const holdingCostsPerMonth = parseFloat(document.getElementById('holdingCosts').value) || 0;
             const realtorFeePct = parseFloat(document.getElementById('realtorFeePct').value) || 0;
 
-            // Aggregating construction budgets & cumulative equity percentages
             let totalRehab = 0;
             let totalValueIncreasePct = 0;
             let chosenUpgrades = [];
 
-            // Master data structure tying Dropdown selectors to their numerical Quantity boxes
+            // Tracking Select Dropdowns paired with their explicit Quantity Multipliers
             const configuration = [
                 { select: 'optInteriorPaint', qty: 'qtyInteriorPaint' },
                 { select: 'optExteriorWall', qty: 'qtyExteriorWall' },
@@ -396,11 +394,11 @@
                 totalRehab += data.cost;
                 totalValueIncreasePct += data.pct;
                 if(data.cost > 0) {
-                    chosenUpgrades.push(`${data.name} (Qty: ${data.unitQty}) (+$${data.cost.toLocaleString()})`);
+                    chosenUpgrades.push({ name: data.name, qty: data.unitQty, cost: data.cost });
                 }
             });
 
-            // Checking Core Structural Hazards (Kept separate as flat single-occurrence check items)
+            // Flat Structural Stabilization Hazard Cost Checks
             const hazards = [
                 { id: 'chkSeptic', cost: 20000, pct: 12, name: 'Septic System' },
                 { id: 'chkFoundation', cost: 18000, pct: 12, name: 'Foundation Repair' },
@@ -408,31 +406,30 @@
                 { id: 'chkElectrical', cost: 6000, pct: 6, name: 'Electrical Work' }
             ];
 
+            let activeHazards = [];
             hazards.forEach(h => {
                 if(document.getElementById(h.id).checked) {
                     totalRehab += h.cost;
                     totalValueIncreasePct += h.pct;
-                    chosenUpgrades.push(`${h.name} (+$${h.cost.toLocaleString()})`);
+                    activeHazards.push({ name: h.name, cost: h.cost });
                 }
             });
 
-            // DYNAMIC FORMULA: Resale Price (ARV) automatically scales from original Purchase Price baseline!
+            // Compounding After Repair Value Formulations (ARV = Baseline Acquisition * Value-Add Strategy Yields)
             const arv = purchasePrice * (1 + (totalValueIncreasePct / 100));
 
-            // Business Operational Formulas
             const downPaymentAmount = purchasePrice * (downPaymentPct / 100);
             const buyingClosingCosts = purchasePrice * (closingCostPct / 100);
             const totalHoldingCosts = timeline * holdingCostsPerMonth;
             const sellingFeesAmount = arv * (realtorFeePct / 100);
 
-            // Expense totals incurred by investor
             const totalAllInCost = purchasePrice + totalRehab + buyingClosingCosts + totalHoldingCosts + sellingFeesAmount;
             const totalOutofPocketEquity = downPaymentAmount + buyingClosingCosts + totalRehab + totalHoldingCosts;
             
             const netProfit = arv - totalAllInCost;
             const roi = totalOutofPocketEquity > 0 ? (netProfit / totalOutofPocketEquity) * 100 : 0;
 
-            // Update Dynamic Inputs & Output UI Fields
+            // Updating Screen Element Values
             document.getElementById('lblCalculatedARV').value = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblDashARV').innerText = `$${Math.round(arv).toLocaleString()}`;
             document.getElementById('lblDashPct').innerText = `+${totalValueIncreasePct}%`;
@@ -440,7 +437,6 @@
             document.getElementById('lblCalculatedDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
             document.getElementById('lblCalculatedSelling').innerText = `$${Math.round(sellingFeesAmount).toLocaleString()}`;
 
-            // Update Side Performance Matrix Dashboard
             document.getElementById('lblSummaryDown').innerText = `$${downPaymentAmount.toLocaleString()}`;
             document.getElementById('lblSummaryClosing').innerText = `$${buyingClosingCosts.toLocaleString()}`;
             document.getElementById('lblSummaryRehab').innerText = `$${totalRehab.toLocaleString()}`;
@@ -453,10 +449,12 @@
 
             document.getElementById('lblNetProfit').className = netProfit >= 0 ? "text-4xl font-black text-emerald-400 mt-1" : "text-4xl font-black text-rose-500 mt-1";
 
-            // Underwrite Rule of Thumb Logic
+            // Underwriting 70% Safety Threshold Evaluation
             const maxAllowableOffer = (arv * 0.7) - totalRehab;
             const ruleBox = document.getElementById('ruleBox');
+            let passesRule = false;
             if (purchasePrice <= maxAllowableOffer) {
+                passesRule = true;
                 ruleBox.className = "mt-4 p-2.5 rounded-lg text-xs text-center bg-emerald-950 text-emerald-400 border border-emerald-800";
                 ruleBox.innerText = `✅ Passes 70% Rule (Max Offer: $${Math.round(maxAllowableOffer).toLocaleString()})`;
             } else {
@@ -464,7 +462,8 @@
                 ruleBox.innerText = `⚠️ Exceeds 70% Rule (Max Offer: $${Math.round(maxAllowableOffer).toLocaleString()})`;
             }
 
-            // Sync Timeline risk matrix rows
+            // Programmatic Matrix Loop Mapping for Time Slippage Simulation rows
+            let matrixScenarios = [];
             const delays = [0, 2, 4, 6];
             delays.forEach(d => {
                 const totalMonths = timeline + d;
@@ -481,72 +480,278 @@
                 pLabel.innerText = `$${adjustedProfit.toLocaleString()}`;
                 pLabel.className = adjustedProfit >= 0 ? "px-6 py-4 text-right font-mono font-bold text-emerald-600" : "px-6 py-4 text-right font-mono font-bold text-rose-600";
                 document.getElementById(`t${d}_roi`).innerText = `${adjustedROI.toFixed(1)}%`;
+
+                matrixScenarios.push({
+                    name: d === 0 ? "On Schedule" : d === 2 ? "Minor Delay (+2 Mo)" : d === 4 ? "Moderate Delay (+4 Mo)" : "Severe Delay (+6 Mo)",
+                    duration: `${totalMonths} Months`,
+                    addedHold: `$${addedHold.toLocaleString()}`,
+                    profit: `$${adjustedProfit.toLocaleString()}`,
+                    roi: `${adjustedROI.toFixed(1)}%`
+                });
             });
 
-            window.activeUpgradesList = chosenUpgrades;
-            window.activeTotalRehab = totalRehab;
-            window.activeARV = arv;
+            // Packing global state cache data mapping parameters for high-fidelity jsPDF printing
+            window.pdfPayload = {
+                date: new Date().toLocaleDateString(),
+                purchasePrice: `$${purchasePrice.toLocaleString()}`,
+                downPayment: `$${downPaymentAmount.toLocaleString()}`,
+                downPaymentPct: `${downPaymentPct}%`,
+                closingCosts: `$${buyingClosingCosts.toLocaleString()}`,
+                closingCostsPct: `${closingCostPct}%`,
+                rehabBudget: `$${totalRehab.toLocaleString()}`,
+                holdingCosts: `$${totalHoldingCosts.toLocaleString()}`,
+                holdingMonths: timeline,
+                realtorFees: `$${Math.round(sellingFeesAmount).toLocaleString()}`,
+                realtorFeesPct: `${realtorFeePct}%`,
+                arv: `$${Math.round(arv).toLocaleString()}`,
+                valueBoostPct: `+${totalValueIncreasePct}%`,
+                totalCashNeeded: `$${totalOutofPocketEquity.toLocaleString()}`,
+                netProfit: `$${netProfit.toLocaleString()}`,
+                roi: `${roi.toFixed(1)}%`,
+                passes70Rule: passesRule ? "PASSED" : "FAILED (Exceeded Safety Threshold)",
+                maxOffer: `$${Math.round(maxAllowableOffer).toLocaleString()}`,
+                upgrades: chosenUpgrades,
+                hazards: activeHazards,
+                matrix: matrixScenarios
+            };
         }
 
         function generatePDF() {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            const doc = new jsPDF('p', 'mm', 'a4');
+            const data = window.pdfPayload;
 
-            const getVal = (id) => document.getElementById(id).value;
-            const getTxt = (id) => document.getElementById(id).innerText;
+            // Corporate Layout Theming Coordinates (Slate Blue Executive Premium Palette)
+            const primaryColor = [15, 23, 42]; // #0f172a
+            const accentGreen = [22, 163, 74]; // #16a34a
+            const borderGrey = [226, 232, 240]; // #e2e8f0
+            const textMain = [51, 65, 85]; // #334155
 
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(20);
-            doc.text("Fix & Flip Valuation and Strategy Report", 14, 20);
-            
-            doc.setFontSize(10);
-            doc.setFont("helvetica", "normal");
-            doc.text(`Analysis Execution Date: ${new Date().toLocaleDateString()}`, 14, 26);
-            doc.line(14, 30, 196, 30);
-
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(12);
-            doc.text("1. Capital Structure Summary", 14, 40);
-            doc.setFont("helvetica", "normal");
-            doc.text(`Purchase Price: $${parseFloat(getVal('purchasePrice')).toLocaleString()}`, 14, 48);
-            doc.text(`Out-of-Pocket Down Payment: ${getTxt('lblCalculatedDown')}`, 14, 55);
-            doc.text(`Calculated Valuation Boost: ${getTxt('lblDashPct')}`, 14, 62);
-            doc.text(`Estimated Resale Value (ARV): $${Math.round(window.activeARV).toLocaleString()}`, 14, 69);
-
-            doc.setFont("helvetica", "bold");
-            doc.text("2. Chosen Renovation Strategies", 14, 82);
-            doc.setFont("helvetica", "normal");
-            
-            let y = 90;
-            if(window.activeUpgradesList.length === 0) {
-                doc.text("• No upgrade items chosen.", 18, y);
-                y += 7;
-            } else {
-                window.activeUpgradesList.forEach(item => {
-                    doc.text(`• ${item}`, 18, y);
-                    y += 7;
-                });
+            function drawHeaderBar(title, y) {
+                doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                doc.rect(14, y, 182, 7, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFont("helvetica", "bold");
+                doc.setFontSize(10);
+                doc.text(title, 18, y + 5);
+                doc.setTextColor(textMain[0], textMain[1], textMain[2]);
             }
-            
+
+            // Page Header Top Graphic Banner Plate
+            doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.rect(0, 0, 210, 38, 'F');
+
+            doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
-            doc.text(`Total Construction Expenses: $${window.activeTotalRehab.toLocaleString()}`, 14, y + 3);
-
-            doc.line(14, y + 8, 196, y + 8);
-
-            doc.text("3. Target Projections Overview", 14, y + 18);
+            doc.setFontSize(22);
+            doc.text("REAL ESTATE DEAL UNDERWRITING REPORT", 14, 18);
+            
             doc.setFont("helvetica", "normal");
-            doc.text(`Total Cash Allocation Needed: ${getTxt('lblTotalEquity')}`, 14, y + 26);
-            doc.text(`Exit Realtor Charges: ${getTxt('lblCalculatedSelling')}`, 14, y + 33);
+            doc.setFontSize(9);
+            doc.text(`Generated for Investment Review Portfolio  |  Execution Date: ${data.date}`, 14, 28);
+
+            // SECTION 1: MASTER PRO-FORMA FINANCIAL INVESTMENT DASHBOARD TABLE
+            let y = 48;
+            drawHeaderBar("1. FINANCIAL UNDERWRITING DASHBOARD (TARGET PERFORMANCE)", y);
             
-            doc.setFontSize(14);
+            y += 12;
             doc.setFont("helvetica", "bold");
-            doc.text(`PROJECTED STRATEGY NET PROFIT: ${getTxt('lblNetProfit')}`, 14, y + 46);
-            doc.text(`PROJECTED CASH-ON-CASH ROI: ${getTxt('lblROI')}`, 14, y + 54);
+            doc.setFontSize(10);
+            doc.text("Key Performance Indicator", 14, y);
+            doc.text("Value Metric", 110, y);
+            doc.text("Pro-Forma Operational Composition", 145, y);
+
+            doc.setDrawColor(borderGrey[0], borderGrey[1], borderGrey[2]);
+            doc.setLineWidth(0.3);
+            doc.line(14, y + 2, 196, y + 2);
+
+            const dashboardRows = [
+                { kpi: "Estimated After Repair Value (ARV)", val: data.arv, meta: `Based on a ${data.valueBoostPct} strategic upgrade compound.` },
+                { kpi: "Initial Property Purchase Price", val: data.purchasePrice, meta: "Baseline cost asset structure." },
+                { kpi: "Out-of-Pocket Down Payment Equity", val: data.downPayment, meta: `${data.downPaymentPct} capital allocation strategy placement.` },
+                { kpi: "Upfront Acquisition Closing Costs", val: data.closingCosts, meta: `${data.closingCostsPct} legal title transfer and escrow charges.` },
+                { kpi: "Total Construction Rehab Expenses", val: data.rehabBudget, meta: "Hard expenses tracked across all asset renovations." },
+                { kpi: "Holding Costs Project Overhead", val: data.holdingCosts, meta: `Carrying operations mapped over targeted ${data.holdingMonths} months.` },
+                { kpi: "Broker Disposition / Realtor Fees", val: data.realtorFees, meta: `${data.realtorFeesPct} settlement broker asset realization fee.` }
+            ];
+
+            y += 7;
+            dashboardRows.forEach(row => {
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(9);
+                doc.text(row.kpi, 14, y);
+                
+                doc.setFont("helvetica", "bold");
+                if(row.kpi.includes("ARV")) doc.setTextColor(accentGreen[0], accentGreen[1], accentGreen[2]);
+                doc.text(row.val, 110, y);
+                doc.setTextColor(textMain[0], textMain[1], textMain[2]);
+
+                doc.setFont("helvetica", "italic");
+                doc.setFontSize(8);
+                doc.text(row.meta, 145, y);
+                
+                doc.line(14, y + 2, 196, y + 2);
+                y += 6.5;
+            });
+
+            // HERO DATA METRIC CALLOUT BLOCK CARD PANELS
+            y += 2;
+            doc.setFillColor(248, 250, 252);
+            doc.rect(14, y, 182, 22, 'F');
+            doc.rect(14, y, 182, 22, 'S');
+
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9);
+            doc.text("TOTAL CASH REQUIRED EQUITY OUTLAY", 18, y + 7);
+            doc.text("NET STRATEGY CASH PROFIT", 78, y + 7);
+            doc.text("CASH-ON-CASH ROI YIELD", 140, y + 7);
+
+            doc.setFontSize(13);
+            doc.text(data.totalCashNeeded, 18, y + 16);
+            
+            doc.setTextColor(accentGreen[0], accentGreen[1], accentGreen[2]);
+            doc.text(data.netProfit, 78, y + 16);
+            doc.text(data.roi, 140, y + 16);
+            doc.setTextColor(textMain[0], textMain[1], textMain[2]);
+
+            // INTERSTICE 70% ACCOUNTING METRIC VERIFICATION LINES
+            y += 28;
+            drawHeaderBar("REGULATORY RISK RATIO UNDERWRITING (70% ACCOUNTING RULE)", y);
+            
+            y += 12;
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(9.5);
+            doc.text(`Rule Compliance Standing: `, 14, y);
+            doc.setFont("helvetica", "bold");
+            if(data.passes70Rule.includes("PASSED")) {
+                doc.setTextColor(accentGreen[0], accentGreen[1], accentGreen[2]);
+            } else {
+                doc.setTextColor(185, 28, 28);
+            }
+            doc.text(data.passes70Rule, 56, y);
+            doc.setTextColor(textMain[0], textMain[1], textMain[2]);
+
+            doc.setFont("helvetica", "normal");
+            doc.text(`Maximum Allowable Acquisition Offer Guideline Threshold: `, 14, y + 6);
+            doc.setFont("helvetica", "bold");
+            doc.text(data.maxOffer, 102, y + 6);
+            doc.setTextColor(textMain[0], textMain[1], textMain[2]);
+
+            // SECTION 2: ITEMIZED CONSTRUCTION ESTIMATOR AUDIT LOGS
+            y += 18;
+            drawHeaderBar("2. ITEMIZED RENOVATION STRATEGY AUDIT LOG", y);
+
+            y += 11;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9.5);
+            doc.text("Upgrade Renovation Strategy Assignment", 16, y);
+            doc.text("Volume Multiplier", 125, y);
+            doc.text("Aggregate Hard Cost Allocation", 158, y);
+            doc.line(14, y + 2, 196, y + 2);
+
+            y += 6.5;
+            let upgradeLogged = false;
+
+            data.upgrades.forEach(up => {
+                upgradeLogged = true;
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(9);
+                doc.text(`• ${up.name}`, 16, y);
+                doc.text(`${up.qty} Unit(s)`, 132, y);
+                doc.setFont("helvetica", "bold");
+                doc.text(`$${up.cost.toLocaleString()}`, 164, y);
+                doc.line(14, y + 2, 196, y + 2);
+                y += 6.5;
+            });
+
+            data.hazards.forEach(haz => {
+                upgradeLogged = true;
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(9);
+                doc.text(`• SYSTEM HAZARD: ${haz.name} Remediation Check`, 16, y);
+                doc.text("Flat Occurrence", 125, y);
+                doc.setFont("helvetica", "bold");
+                doc.text(`$${haz.cost.toLocaleString()}`, 164, y);
+                doc.line(14, y + 2, 196, y + 2);
+                y += 6.5;
+            });
+
+            if(!upgradeLogged) {
+                doc.setFont("helvetica", "italic");
+                doc.text("No active cosmetic renovations or structural stabilization hazard checkboxes selected.", 16, y);
+                y += 6.5;
+            }
+
+            // INSULATE SENSITIVITY VIEW BY ADDING PAGE BREAK FOR PAGE 2 FORWARDING
+            doc.addPage();
+            
+            // Page 2 Graphic Top Header Canvas
+            doc.setFillColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+            doc.rect(0, 0, 210, 25, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(14);
+            doc.text("FIX & FLIP INVESTMENT STRATEGY RISK INSIGHTS", 14, 16);
+            doc.setTextColor(textMain[0], textMain[1], textMain[2]);
+
+            // SECTION 3: TIMELINE SENSITIVITY OPERATIONAL ACCOUNTING RISK MATRIX
+            y = 38;
+            drawHeaderBar("3. OPERATIONAL TIMELINE LIABILITY & CAPITAL COMPRESSION ANALYSIS", y);
+
+            y += 12;
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(9.5);
+            doc.text("Operational Project Milestone Scenario", 14, y);
+            doc.text("Total Duration", 80, y);
+            doc.text("Added Idle Carrying Leak", 112, y);
+            doc.text("Adjusted Net Return", 148, y);
+            doc.text("Adjusted Cash ROI", 178, y);
+            doc.line(14, y + 2, 196, y + 2);
+
+            y += 7;
+            data.matrix.forEach(row => {
+                doc.setFont("helvetica", "normal");
+                doc.setFontSize(9);
+                doc.text(row.name, 14, y);
+                doc.text(row.duration, 82, y);
+                doc.text(row.addedHold, 116, y);
+                
+                doc.setFont("helvetica", "bold");
+                if(row.profit.includes("-")) {
+                    doc.setTextColor(185, 28, 28);
+                } else {
+                    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                }
+                doc.text(row.profit, 150, y);
+                doc.text(row.roi, 180, y);
+                doc.setTextColor(textMain[0], textMain[1], textMain[2]);
+
+                doc.line(14, y + 2, 196, y + 2);
+                y += 7;
+            });
+
+            // PORTFOLIO RISK WARNING COMPLIANCE FOOTER ATTESTATION NOTE BOX
+            y += 15;
+            doc.setFillColor(254, 242, 242);
+            doc.rect(14, y, 182, 26, 'F');
+            doc.setDrawColor(239, 68, 68);
+            doc.rect(14, y, 182, 26, 'S');
+
+            doc.setTextColor(153, 27, 27);
+            doc.setFont("helvetica", "bold");
+            doc.setFontSize(8.5);
+            doc.text("PORTFOLIO COMPLIANCE UNDERWRITING ATTESTATION NOTICE", 18, y + 6);
+            
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(7.5);
+            let noticeText = "This pro-forma asset valuation represents computational underwritings derived directly from variable values and market estimations assigned by the primary user. Real estate asset liquidation speeds, interest rate velocity fluctuations, and unforeseen local municipal structural delays can heavily compromise project performance parameters. Final transactional signature clearance demands standard local verified independent appraisal verification.";
+            let splitText = doc.splitTextToSize(noticeText, 174);
+            doc.text(splitText, 18, y + 11);
 
             doc.save("Flip-Valuation-Analysis-Report.pdf");
         }
 
-        // Initialize calculation on page load
+        // Auto-run baseline formulations immediately on viewport initializing load
         window.onload = function() {
             calculateAll();
         };
