@@ -30,6 +30,17 @@
             </button>
         </div>
 
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 shadow-sm">
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Student Analyst Name(s)</label>
+                <input type="text" id="studentName" value="John Doe & Jane Smith" class="w-full mt-1 p-2.5 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 font-medium" placeholder="Enter student name(s)..." oninput="calculateAll()">
+            </div>
+            <div>
+                <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Target Property Address</label>
+                <input type="text" id="propertyAddress" value="123 Investment Way, Suite A" class="w-full mt-1 p-2.5 bg-white border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 font-medium" placeholder="Street Address, City, State, ZIP..." oninput="calculateAll()">
+            </div>
+        </div>
+
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2 space-y-4">
                 
@@ -365,6 +376,10 @@
         }
 
         function calculateAll() {
+            // Extraction of student name and property address metadata
+            const studentName = document.getElementById('studentName').value.trim() || "N/A";
+            const propertyAddress = document.getElementById('propertyAddress').value.trim() || "N/A";
+
             // Financial Baseline Variable Extractions
             const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
             const closingCostPct = parseFloat(document.getElementById('closingCostPct').value) || 0;
@@ -493,6 +508,8 @@
             // Packing global state cache data mapping parameters for high-fidelity jsPDF printing
             window.pdfPayload = {
                 date: new Date().toLocaleDateString(),
+                studentName: studentName,
+                propertyAddress: propertyAddress,
                 purchasePrice: `$${purchasePrice.toLocaleString()}`,
                 downPayment: `$${downPaymentAmount.toLocaleString()}`,
                 downPaymentPct: `${downPaymentPct}%`,
@@ -543,12 +560,15 @@
 
             doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(22);
-            doc.text("REAL ESTATE DEAL UNDERWRITING REPORT", 14, 18);
+            doc.setFontSize(18);
+            doc.text("REAL ESTATE DEAL UNDERWRITING REPORT", 14, 15);
             
             doc.setFont("helvetica", "normal");
             doc.setFontSize(9);
-            doc.text(`Generated for Investment Review Portfolio  |  Execution Date: ${data.date}`, 14, 28);
+            doc.setTextColor(148, 163, 184); // Muted slate gray
+            doc.text(`Analyst(s): ${data.studentName}   |   Property: ${data.propertyAddress}`, 14, 23);
+            doc.text(`Execution Date: ${data.date}   |   Academic Investment Review Portfolio`, 14, 29);
+            doc.setTextColor(textMain[0], textMain[1], textMain[2]);
 
             // SECTION 1: MASTER PRO-FORMA FINANCIAL INVESTMENT DASHBOARD TABLE
             let y = 48;
@@ -691,7 +711,12 @@
             doc.setTextColor(255, 255, 255);
             doc.setFont("helvetica", "bold");
             doc.setFontSize(14);
-            doc.text("FIX & FLIP INVESTMENT STRATEGY RISK INSIGHTS", 14, 16);
+            doc.text("FIX & FLIP INVESTMENT STRATEGY RISK INSIGHTS", 14, 11);
+            
+            doc.setFont("helvetica", "normal");
+            doc.setFontSize(8.5);
+            doc.setTextColor(148, 163, 184);
+            doc.text(`Analyst(s): ${data.studentName}   |   Target Asset: ${data.propertyAddress}`, 14, 18);
             doc.setTextColor(textMain[0], textMain[1], textMain[2]);
 
             // SECTION 3: TIMELINE SENSITIVITY OPERATIONAL ACCOUNTING RISK MATRIX
