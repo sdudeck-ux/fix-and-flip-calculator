@@ -160,10 +160,10 @@
                 <div class="pt-2">
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">⚠️ Check Active Structural Hazards Below</label>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 bg-slate-50 p-3 rounded border border-slate-200">
-                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkSeptic" class="rounded text-blue-600" onchange="calculateAll()"><span>Septic (+$20k)</span></label>
-                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkFoundation" class="rounded text-blue-600" onchange="calculateAll()"><span>Foundation (+$18k)</span></label>
-                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkHeating" class="rounded text-blue-600" onchange="calculateAll()"><span>Heating (+$7k)</span></label>
-                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkElectrical" class="rounded text-blue-600" onchange="calculateAll()"><span>Electric (+$6k)</span></label>
+                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkSeptic" class="rounded text-blue-600" onchange="calculateAll()"><span>Septic (+$20k | +12%)</span></label>
+                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkFoundation" class="rounded text-blue-600" onchange="calculateAll()"><span>Foundation (+$18k | +12%)</span></label>
+                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkHeating" class="rounded text-blue-600" onchange="calculateAll()"><span>Heating (+$7k | +12%)</span></label>
+                        <label class="flex items-center space-x-2 text-xs text-slate-700 cursor-pointer"><input type="checkbox" id="chkElectrical" class="rounded text-blue-600" onchange="calculateAll()"><span>Electric (+$6k | +6%)</span></label>
                     </div>
                 </div>
             </div>
@@ -237,15 +237,15 @@
                 <div id="ruleBox" class="p-2.5 rounded text-center text-xs font-bold"></div>
             </div>
 
-            <div class="space-y-3">
+            <div class="page-break space-y-3">
                 <div class="bg-[#0f172a] text-white text-xs font-bold uppercase tracking-wider px-4 py-2.5 rounded-t">
-                    2. Rehab Strategy Options (Select Upgrades)
+                    2. Rehab Strategy Options (Selected Upgrades & Mitigations)
                 </div>
                 <table class="w-full text-left text-xs border-collapse border border-slate-200 shadow-sm">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-300 font-bold text-slate-700">
-                            <th class="p-3 border-r border-slate-200">Renovation Strategy Item</th>
-                            <th class="p-3 text-center w-28 border-r border-slate-200">Multiplier</th>
+                            <th class="p-3 border-r border-slate-200">Renovation / Structural Mitigation Item</th>
+                            <th class="p-3 text-center w-28 border-r border-slate-200">Yield Impact</th>
                             <th class="p-3 text-right w-40 font-mono">Total Cost</th>
                         </tr>
                     </thead>
@@ -348,6 +348,7 @@
             let totalValueIncreasePct = 0;
             let printTableHtml = "";
 
+            // Standard upgrades layout map
             const upgradesConfig = [
                 { select: 'optInteriorPaint', adjustable: false },
                 { select: 'optExteriorWall', adjustable: false },
@@ -359,18 +360,18 @@
 
             upgradesConfig.forEach(item => {
                 const data = parseDropdown(item.select, item.adjustable, item.qty);
-                // CRITICAL FILTER: Only show lines inside Section 2 if a cost is attached
                 if(data.rawBaseCost > 0) {
                     totalRehab += data.cost;
                     totalValueIncreasePct += data.pct;
                     printTableHtml += `<tr class="border-b border-slate-200">
                         <td class="p-3 border-r border-slate-200 font-medium text-slate-900">${data.name}</td>
-                        <td class="p-3 border-r border-slate-200 text-center font-mono">${data.unitQty} Unit(s)</td>
+                        <td class="p-3 border-r border-slate-200 text-center font-mono text-emerald-600 font-semibold">+${data.pct}%</td>
                         <td class="p-3 text-right font-mono font-bold text-slate-900">$${data.cost.toLocaleString()}</td>
                     </tr>`;
                 }
             });
 
+            // Structural Hazards Metrics Layout Map
             const hazards = [
                 { id: 'chkSeptic', cost: 20000, pct: 12, name: 'Septic System Replacement' },
                 { id: 'chkFoundation', cost: 18000, pct: 12, name: 'Foundation Structural Repair' },
@@ -384,7 +385,7 @@
                     totalValueIncreasePct += h.pct;
                     printTableHtml += `<tr class="border-b border-slate-200 bg-amber-50/40">
                         <td class="p-3 border-r border-slate-200 font-semibold text-amber-900">⚠️ STRUCTURAL MITIGATION: ${h.name}</td>
-                        <td class="p-3 border-r border-slate-200 text-center font-mono">1 Item</td>
+                        <td class="p-3 border-r border-slate-200 text-center font-mono text-amber-700 font-bold">+${h.pct}%</td>
                         <td class="p-3 text-right font-mono font-bold text-amber-900">$${h.cost.toLocaleString()}</td>
                     </tr>`;
                 }
