@@ -393,7 +393,6 @@
             const element = document.getElementById(id);
             const values = element.value.split(',');
             
-            // Default everything to quantity 1 unless it's the adjustable bathroom field
             let qty = 1;
             if (isAdjustableQty) {
                 const qtyElement = document.getElementById(qtyId);
@@ -422,7 +421,6 @@
             let totalValueIncreasePct = 0;
             let printTableHtml = "";
 
-            // Mapping list configurations - Only Bathroom has qty tied to it now
             const configuration = [
                 { select: 'optInteriorPaint', adjustable: false },
                 { select: 'optExteriorWall', adjustable: false },
@@ -436,7 +434,7 @@
 
             configuration.forEach(item => {
                 const data = parseDropdown(item.select, item.adjustable, item.qty);
-                // CRITICAL EXCLUSION FILTER: Only write row out if dollar amount > 0
+                // CRITICAL FILTER: Only include item in table if cost is greater than 0
                 if(data.rawBaseCost > 0) {
                     totalRehab += data.cost;
                     totalValueIncreasePct += data.pct;
@@ -467,8 +465,9 @@
                 }
             });
 
+            // Clean fallback row if all items are empty ($0 cost)
             if(printTableHtml === "") {
-                printTableHtml = `<tr><td colspan="3" class="p-4 text-center text-gray-400 italic bg-gray-50 text-xs">No construction items or hazards selected.</td></tr>`;
+                printTableHtml = `<tr><td colspan="3" class="p-4 text-center text-gray-400 italic bg-gray-50 text-xs">No rehabilitation items or structural hazards selected for this deal layout.</td></tr>`;
             }
 
             printTableHtml += `<tr class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-700 text-xs">
