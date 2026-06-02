@@ -498,9 +498,10 @@
 
                 matrixScenarios.push({
                     name: d === 0 ? "On Schedule" : d === 2 ? "Minor Delay (+2 Mo)" : d === 4 ? "Moderate Delay (+4 Mo)" : "Severe Delay (+6 Mo)",
-                    duration: `${totalMonths} Months`,
+                    duration: `${totalMonths} Mo`,
                     addedHold: `$${addedHold.toLocaleString()}`,
                     profit: `$${adjustedProfit.toLocaleString()}`,
+                    rawProfit: adjustedProfit, // For text color checks in PDF matrix rows
                     roi: `${adjustedROI.toFixed(1)}%`
                 });
             });
@@ -524,6 +525,7 @@
                 valueBoostPct: `+${totalValueIncreasePct}%`,
                 totalCashNeeded: `$${totalOutofPocketEquity.toLocaleString()}`,
                 netProfit: `$${netProfit.toLocaleString()}`,
+                rawProfit: netProfit, // For logic checking in PDF summary cards
                 roi: `${roi.toFixed(1)}%`,
                 passes70Rule: passesRule ? "PASSED" : "FAILED (Exceeded Safety Threshold)",
                 maxOffer: `$${Math.round(maxAllowableOffer).toLocaleString()}`,
@@ -541,6 +543,7 @@
             // Corporate Layout Theming Coordinates (Slate Blue Executive Premium Palette)
             const primaryColor = [15, 23, 42]; // #0f172a
             const accentGreen = [22, 163, 74]; // #16a34a
+            const alertRed = [185, 28, 28];   // #b91c1c
             const borderGrey = [226, 232, 240]; // #e2e8f0
             const textMain = [51, 65, 85]; // #334155
 
@@ -614,24 +617,29 @@
                 y += 6.5;
             });
 
-            // HERO DATA METRIC CALLOUT BLOCK CARD PANELS
+            // FIXED: WIDENED THE X-AXIS COORDINATES FROM 14/78/140 TO 15/90/150 AND SHORTENED TEXT STRINGS TO ABSOLUTELY ELIMINATE OVERLAPPING
             y += 2;
             doc.setFillColor(248, 250, 252);
             doc.rect(14, y, 182, 22, 'F');
             doc.rect(14, y, 182, 22, 'S');
 
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9);
-            doc.text("TOTAL CASH REQUIRED EQUITY OUTLAY", 18, y + 7);
-            doc.text("NET STRATEGY CASH PROFIT", 78, y + 7);
-            doc.text("CASH-ON-CASH ROI YIELD", 140, y + 7);
+            doc.setFontSize(8);
+            doc.text("TOTAL CASH REQUIRED", 17, y + 7);
+            doc.text("NET CASH PROFIT STRATEGY", 90, y + 7);
+            doc.text("CASH-ON-CASH ROI YIELD", 150, y + 7);
 
-            doc.setFontSize(13);
-            doc.text(data.totalCashNeeded, 18, y + 16);
+            doc.setFontSize(12);
+            doc.text(data.totalCashNeeded, 17, y + 16);
             
-            doc.setTextColor(accentGreen[0], accentGreen[1], accentGreen[2]);
-            doc.text(data.netProfit, 78, y + 16);
-            doc.text(data.roi, 140, y + 16);
+            // PROFIT AND ROI TURN ALERT RED IF BELOW ZERO
+            if (data.rawProfit < 0) {
+                doc.setTextColor(alertRed[0], alertRed[1], alertRed[2]);
+            } else {
+                doc.setTextColor(accentGreen[0], accentGreen[1], accentGreen[2]);
+            }
+            doc.text(data.netProfit, 90, y + 16);
+            doc.text(data.roi, 150, y + 16);
             doc.setTextColor(textMain[0], textMain[1], textMain[2]);
 
             // INTERSTICE 70% ACCOUNTING METRIC VERIFICATION LINES
@@ -646,7 +654,7 @@
             if(data.passes70Rule.includes("PASSED")) {
                 doc.setTextColor(accentGreen[0], accentGreen[1], accentGreen[2]);
             } else {
-                doc.setTextColor(185, 28, 28);
+                doc.setTextColor(alertRed[0], alertRed[1], alertRed[2]);
             }
             doc.text(data.passes70Rule, 56, y);
             doc.setTextColor(textMain[0], textMain[1], textMain[2]);
@@ -723,14 +731,15 @@
             y = 38;
             drawHeaderBar("3. OPERATIONAL TIMELINE LIABILITY & CAPITAL COMPRESSION ANALYSIS", y);
 
+            // FIXED: COMPLETELY BALANCED X-AXIS SNAP STEPS FOR THE TABLE COLUMNS AND CONDENSED LABELS TO ELIMINATE SQUEEZING OVERLAPS
             y += 12;
             doc.setFont("helvetica", "bold");
-            doc.setFontSize(9.5);
-            doc.text("Operational Project Milestone Scenario", 14, y);
-            doc.text("Total Duration", 80, y);
-            doc.text("Added Idle Carrying Leak", 112, y);
-            doc.text("Adjusted Net Return", 148, y);
-            doc.text("Adjusted Cash ROI", 178, y);
+            doc.setFontSize(9);
+            doc.text("Project Milestone Scenario", 14, y);
+            doc.text("Duration", 74, y);
+            doc.text("Added Hold Costs", 102, y);
+            doc.text("Adjusted Net Profit", 138, y);
+            doc.text("Adjusted Cash ROI", 172, y);
             doc.line(14, y + 2, 196, y + 2);
 
             y += 7;
@@ -738,17 +747,17 @@
                 doc.setFont("helvetica", "normal");
                 doc.setFontSize(9);
                 doc.text(row.name, 14, y);
-                doc.text(row.duration, 82, y);
-                doc.text(row.addedHold, 116, y);
+                doc.text(row.duration, 74, y);
+                doc.text(row.addedHold, 102, y);
                 
                 doc.setFont("helvetica", "bold");
-                if(row.profit.includes("-")) {
-                    doc.setTextColor(185, 28, 28);
+                if(row.rawProfit < 0) {
+                    doc.setTextColor(alertRed[0], alertRed[1], alertRed[2]);
                 } else {
-                    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+                    doc.setTextColor(accentGreen[0], accentGreen[1], accentGreen[2]);
                 }
-                doc.text(row.profit, 150, y);
-                doc.text(row.roi, 180, y);
+                doc.text(row.profit, 138, y);
+                doc.text(row.roi, 172, y);
                 doc.setTextColor(textMain[0], textMain[1], textMain[2]);
 
                 doc.line(14, y + 2, 196, y + 2);
