@@ -14,7 +14,9 @@
                 padding: 0 !important;
                 margin: 0 !important;
             }
-            .no-print {
+            /* Completely completely drop interactive form fields on print */
+            .no-print, 
+            #rehab-input-section {
                 display: none !important;
             }
             .print-container {
@@ -34,7 +36,6 @@
                 page-break-before: always !important;
                 margin-top: 20px !important;
             }
-            /* Ensures background fills look crisp on saved files */
             * {
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
@@ -97,7 +98,8 @@
                     <div class="bg-slate-50 p-4 font-bold text-slate-800 border-b border-gray-200">
                         <span class="flex items-center gap-2">🔨 2. Rehab Strategy Options (Select Upgrades)</span>
                     </div>
-                    <div class="p-4 space-y-4 bg-white">
+                    
+                    <div id="rehab-input-section" class="p-4 space-y-4 bg-white">
                         
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🎨 Interior Painting</label>
@@ -111,7 +113,7 @@
                             <label class="block text-xs font-bold text-gray-700 uppercase mb-1">🏡 Exterior Wall Strategy</label>
                             <select id="optExteriorWall" class="w-full p-2 border border-gray-300 rounded-md bg-white text-sm" onchange="calculateAll()">
                                 <option value="0,0,No Work Done">No Exterior Work ($0 | +0%)</option>
-                                <option value="12000,18,Exterior Paint">Paint Exterior ($12,000 | +18% Value)</option>
+                                <option value="12000,18,Exterior Paint" selected>Paint Exterior ($12,000 | +18% Value)</option>
                                 <option value="18000,20,Vinyl Siding">Install Vinyl Siding ($18,000 | +20% Value)</option>
                             </select>
                         </div>
@@ -199,9 +201,9 @@
 
                     </div>
 
-                    <div class="pdf-table-block hidden mt-4 p-4 border-t border-gray-200">
+                    <div class="pdf-table-block p-4 border-t border-gray-200">
                         <div class="bg-slate-800 text-white font-bold text-xs uppercase tracking-wider px-3 py-1.5 rounded-t">
-                            2. Itemized Renovation Audit Log
+                            2. Itemized Renovation Audit Log (Active Spend Items Only)
                         </div>
                         <table class="w-full text-left text-xs border border-collapse border-gray-200">
                             <thead>
@@ -310,7 +312,7 @@
 
                     <div class="mt-4 grid grid-cols-1 gap-3 bg-slate-950 rounded-lg p-3 border border-slate-800">
                         <div class="flex justify-between items-center py-1">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Capital Outlay Required</span>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Total Cash Outlay Required</span>
                             <span class="font-mono text-sm font-bold text-white" id="lblTotalEquity">$0</span>
                         </div>
                         <div class="flex justify-between items-center border-t border-slate-850 pt-2 py-1">
@@ -434,12 +436,12 @@
 
             configuration.forEach(item => {
                 const data = parseDropdown(item.select, item.adjustable, item.qty);
-                // CRITICAL FILTER: Only include item in table if cost is greater than 0
+                // STRICT CHECK: Only evaluate items where real cash is spent
                 if(data.rawBaseCost > 0) {
                     totalRehab += data.cost;
                     totalValueIncreasePct += data.pct;
                     printTableHtml += `<tr class="border-b text-slate-700 text-xs">
-                        <td class="p-2 border-r border-gray-200">${data.name}</td>
+                        <td class="p-2 border-r border-gray-200 font-medium">${data.name}</td>
                         <td class="p-2 border-r border-gray-200 text-center font-mono">${data.unitQty} Unit(s)</td>
                         <td class="p-2 text-right font-mono font-bold">$${data.cost.toLocaleString()}</td>
                     </tr>`;
@@ -467,7 +469,7 @@
 
             // Clean fallback row if all items are empty ($0 cost)
             if(printTableHtml === "") {
-                printTableHtml = `<tr><td colspan="3" class="p-4 text-center text-gray-400 italic bg-gray-50 text-xs">No rehabilitation items or structural hazards selected for this deal layout.</td></tr>`;
+                printTableHtml = `<tr><td colspan="3" class="p-4 text-center text-gray-400 italic bg-gray-50 text-xs">No active rehabilitation upgrades or structural hazards selected for this deal sheet.</td></tr>`;
             }
 
             printTableHtml += `<tr class="bg-slate-50 font-bold text-slate-900 border-t-2 border-slate-700 text-xs">
